@@ -1,6 +1,6 @@
 {
   "name": "Remix Urban Kinetic",
-  "description": "AETHER Quant Mobility: Institutional-grade AI transit intelligence, multi-modal route arbitrage engine (HSR, Autonomous Metro, Executive Fleet, Walk), real-time neural telemetry, and high-frequency dispatch terminal.",
+  "description": "Timeless, simple, and fast Singapore public bus arrival timings, saved commute stops, live carpark lots, and MRT rail service alerts powered by LTA DataMall.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

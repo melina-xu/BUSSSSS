@@ -1,177 +1,68 @@
 export type ThemeMode = 'light' | 'dark';
 
-export type NavTab = 'dashboard' | 'nearby-stops' | 'saved-routes' | 'alerts' | 'weather-hub' | 'lta-live';
+export type NavTab = 'buses' | 'favorites' | 'nearby' | 'carparks' | 'trains';
 
-export type TransportMode = 'all' | 'bus' | 'subway' | 'train' | 'ferry';
-
-export type TravelMode = 'transit' | 'car' | 'walk';
-
-export interface LocationItem {
-  id: string;
-  name: string;
-  address: string;
-  city?: string;
-  coordinates: { x: number; y: number; lat?: number; lng?: number };
-  category: 'current' | 'recent' | 'landmark' | 'mrt' | 'bus' | 'airport';
-  icon: string;
-  quantCode?: string;
+export interface BusArrivalInfo {
+  serviceNo: string;
+  operator: string;
+  nextBus: {
+    arrivalMins: number | null; // e.g. 0 (Arr), 2, 8, null
+    arrivalText: string; // "Arr", "2 min", "15 min", "No est."
+    load: 'SEA' | 'SDA' | 'LSD' | string; // Seats Available, Standing, Limited Standing
+    loadLabel: string;
+    loadColor: 'green' | 'amber' | 'red';
+    type: 'SD' | 'DD' | 'BD' | string;
+    typeLabel: string;
+    feature?: string; // WAB
+  };
+  nextBus2?: {
+    arrivalMins: number | null;
+    arrivalText: string;
+    load: string;
+    loadLabel: string;
+    loadColor: 'green' | 'amber' | 'red';
+    type: string;
+    typeLabel: string;
+  };
+  nextBus3?: {
+    arrivalMins: number | null;
+    arrivalText: string;
+    load: string;
+    loadLabel: string;
+    loadColor: 'green' | 'amber' | 'red';
+    type: string;
+    typeLabel: string;
+  };
 }
 
-export interface NavigationStep {
-  id: string;
-  instruction: string;
-  detail?: string;
-  distanceDisplay: string;
-  durationMinutes: number;
-  mode: 'walk' | 'mrt' | 'bus' | 'car';
-  icon: string;
-  lineBadge?: string;
-  lineColor?: string;
-  lineBg?: string;
-  stopCount?: number;
-  stopsList?: string[];
-  departureTime?: string;
-  arrivalTime?: string;
-  isTransfer?: boolean;
-  telemetrySpeed?: string;
-  efficiencyScore?: number;
-}
-
-export interface RouteOption {
-  id: string;
-  mode: TravelMode;
-  title: string;
-  viaSummary: string;
-  durationMinutes: number;
-  distanceKm: number;
-  departureTime: string;
-  arrivalTime: string;
-  isFastest?: boolean;
-  isRecommended?: boolean;
-  cost?: string;
-  carbonSavedKg?: number;
-  trafficCondition?: 'fast' | 'moderate' | 'slow';
-  steps: NavigationStep[];
-  polyline: { x: number; y: number }[];
-  transitBadges?: {
-    label: string;
-    type: 'mrt' | 'bus' | 'walk';
-    color: string;
-    bg: string;
-  }[];
-  alternativesPolyline?: { x: number; y: number }[];
-  alphaTimeSavedMin?: number;
-  neuralConfidence?: number;
-  volatilityRating?: 'LOW' | 'MED' | 'HIGH';
-  arbitrageType?: 'ALPHA_SPEED' | 'ZERO_TRANSFER' | 'EXECUTIVE_CORRIDOR' | 'ECO_EFFICIENCY';
-}
-
-export interface RouteArrival {
-  routeNumber: string;
-  routeName: string;
-  subText?: string;
-  primaryTime: string; // "Now", "Arr", "2m", "4 min", "8m", "No Service"
-  secondaryTimes?: string[]; // ["4m", "12m"]
-  status: 'on-time' | 'delayed' | 'critical' | 'arriving' | 'no-service';
-  statusText?: string; // "On Time", "+2 min", "DELAYED", "No Service"
-  occupancy?: 'seats-available' | 'standing' | 'full' | 'moderate';
-  colorType?: 'primary' | 'secondary' | 'delayed' | 'critical' | 'subtle' | 'pink' | 'blue';
-  customBadgeColor?: string;
-  customBadgeTextColor?: string;
-  platform?: string;
-  direction?: string;
-  live?: boolean;
-  loadFactorPct?: number;
-  vehicleTelemetryId?: string;
-  speedKmh?: number;
-}
-
-export interface TransitStop {
-  id: string;
-  name: string;
+export interface BusStopDetail {
   code: string;
-  walkTimeMins: number;
-  distanceMeters?: number;
-  distanceDisplay: string; // "3 min • Node ID: 9482"
-  temp: string;
-  weatherIcon: string;
-  coordinates: { x: number; y: number; lat?: number; lng?: number };
-  routes: RouteArrival[];
-  pinned?: boolean;
-  starred?: boolean;
-  type?: 'bus' | 'subway' | 'multimodal' | 'ferry';
-  description?: string;
-  totalActiveRoutes?: number;
-  nodalThroughput?: string;
-  reliabilityScore?: number;
+  name: string;
+  roadName: string;
+  district?: string;
+  lat?: number;
+  lng?: number;
+  services: string[];
 }
 
-export interface SavedRoute {
+export interface FavoriteItem {
+  id: string; // e.g. "83139" or "83139-15"
+  type: 'stop' | 'service';
+  busStopCode: string;
+  busStopName: string;
+  roadName: string;
+  serviceNo?: string;
+  addedAt: number;
+}
+
+export interface MrtLineStatus {
   id: string;
-  title: string;
-  routeNumber: string;
-  from: string;
-  to: string;
-  nextArrival: string;
-  status: 'on-time' | 'delayed' | 'arriving';
-  statusBadge: string;
-  scheduleSummary: string;
-  frequency: string;
-  stopsCount: number;
-  favorite: boolean;
-  colorType: 'primary' | 'secondary' | 'tertiary';
-  quantYield?: string;
-  onTimeP99?: string;
-  corridorRisk?: 'ALPHA' | 'OPTIMAL' | 'MODERATE';
+  name: string;
+  code: string; // NSL, EWL, CCL, DTL, TEL, NEL, BPLRT
+  color: string;
+  bgLight: string;
+  status: 'Normal' | 'Minor Delay' | 'Disrupted';
+  message: string;
+  direction?: string;
 }
 
-export interface NetworkAlert {
-  id: string;
-  category: 'severe' | 'moderate' | 'major-delay' | 'reroute' | 'info' | 'advisory' | 'news';
-  title: string;
-  summary: string;
-  timeAgo: string;
-  validUntil?: string;
-  affectedRoutes: string[];
-  skippedStops?: string[];
-  actionLinkText?: string;
-  type: 'transit' | 'weather' | 'schedule' | 'general';
-  riskScore?: string;
-  automatedRerouteYield?: string;
-}
-
-export interface AlertNotificationSetting {
-  id: string;
-  routeNumber: string;
-  destination: string;
-  triggerDescription: string;
-  enabled: boolean;
-  timeWindow?: string;
-  hedgeThreshold?: string;
-}
-
-export interface WeatherData {
-  city: string;
-  temp: number;
-  unit: 'C' | 'F';
-  condition: string;
-  icon: string;
-  impactSummary: string;
-  hourlyPoints: { time: string; temp: number; pop: number }[];
-  rainProbability: { label: string; prob: number; highlight?: boolean }[];
-  activeAdvisories: { title: string; desc: string; severity: 'warning' | 'info' }[];
-  frictionIndex?: string;
-  pressureHpa?: number;
-  visibilityKm?: number;
-}
-
-export interface StopScheduleEntry {
-  departureTime: string;
-  routeNumber: string;
-  destination: string;
-  platform: string;
-  status: 'On Time' | 'Delayed' | 'Cancelled' | 'Boarding';
-  delayMins?: number;
-  vehicleId?: string;
-  loadPct?: number;
-}

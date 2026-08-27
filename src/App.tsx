@@ -1,39 +1,58 @@
-import { useState, useEffect } from 'react';
-import { ThemeMode, NavTab, TransitStop, NetworkAlert } from './types';
-import { INITIAL_STOPS, ACTIVE_ALERTS_DATA } from './data/mockData';
-import { Sidebar } from './components/Sidebar';
-import { Header } from './components/Header';
-import { DashboardView } from './components/DashboardView';
+import React, { useState, useEffect } from 'react';
+import { ThemeMode, NavTab, FavoriteItem, BusStopDetail } from './types';
+import { SimpleHeader } from './components/SimpleHeader';
+import { BusArrivalsView } from './components/BusArrivalsView';
+import { FavoritesView } from './components/FavoritesView';
 import { NearbyStopsView } from './components/NearbyStopsView';
-import { SavedRoutesView } from './components/SavedRoutesView';
-import { AlertsView } from './components/AlertsView';
-import { WeatherHubView } from './components/WeatherHubView';
-import { LtaLiveFeedView } from './components/LtaLiveFeedView';
-import { ScheduleModal } from './components/ScheduleModal';
-import { NotificationToast } from './components/NotificationToast';
-import { AlternativesModal } from './components/AlternativesModal';
+import { CarparksView } from './components/CarparksView';
+import { MrtStatusView } from './components/MrtStatusView';
+import { ltaApi } from './services/ltaApi';
+
+const FAVORITES_STORAGE_KEY = 'sg_bus_favorites_v1';
+const THEME_STORAGE_KEY = 'sg_bus_theme_v1';
 
 export default function App() {
-  const [theme, setTheme] = useState<ThemeMode>('dark');
-  const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
-  const [activeCity, setActiveCity] = useState<string>('Singapore');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [stops] = useState<TransitStop[]>(INITIAL_STOPS);
-  const [selectedStop, setSelectedStop] = useState<TransitStop | null>(INITIAL_STOPS[0]);
-
-  // Modals & Toast State
-  const [scheduleModalStop, setScheduleModalStop] = useState<TransitStop | null>(null);
-  const [scheduleModalRoute, setScheduleModalRoute] = useState<string | undefined>(undefined);
-  const [activeAlertDetail, setActiveAlertDetail] = useState<NetworkAlert | null>(null);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState({
-    title: 'HSR-01 Inbound Vector Locked',
-    message: 'Approaching Marina Bay Financial Concourse in 1.8 mins (P99: 0.04m)',
-    routeNumber: 'HSR-01'
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY);
+    return saved === 'light' ? 'light' : 'dark';
   });
 
-  // Sync theme with document class
+  const [currentTab, setCurrentTab] = useState<NavTab>('buses');
+  const [activeStopCode, setActiveStopCode] = useState<string>('83139');
+  const [isBackendConnected, setIsBackendConnected] = useState<boolean>(true);
+
+  // Favorites state persisted to localStorage
+  const [favorites, setFavorites] = useState<FavoriteItem[]>(() => {
+    try {
+      const raw = localStorage.getItem(FAVORITES_STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch {
+      // ignore
+    }
+    // Default helpful starter favorites
+    return [
+      {
+        id: '83139',
+        type: 'stop',
+        busStopCode: '83139',
+        busStopName: 'Opp Parkway Parade',
+        roadName: 'Marine Parade Rd',
+        addedAt: Date.now()
+      },
+      {
+        id: '03011',
+        type: 'stop',
+        busStopCode: '03011',
+        busStopName: 'Marina Bay Financial Ctr',
+        roadName: 'Marina Blvd',
+        addedAt: Date.now()
+      }
+    ];
+  });
+
+  // Save theme to localStorage and update HTML class
   useEffect(() => {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
@@ -41,167 +60,156 @@ export default function App() {
     }
   }, [theme]);
 
+  // Save favorites to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+    } catch {
+      // ignore
+    }
+  }, [favorites]);
+
+  // Check backend LTA status
+  useEffect(() => {
+    ltaApi.getStatus().then((status) => {
+      setIsBackendConnected(status.configured);
+    });
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const handleSelectStop = (stop: TransitStop) => {
-    setSelectedStop(stop);
-  };
-
-  const handleOpenSchedule = (stop: TransitStop) => {
-    setScheduleModalStop(stop);
-    setScheduleModalRoute(undefined);
-  };
-
-  const handleOpenScheduleForRoute = (routeNumber: string) => {
-    setScheduleModalRoute(routeNumber);
-    setScheduleModalStop(null);
-  };
-
-  const handleSimulateArrival = () => {
-    setToastMessage({
-      title: 'HSR-01 Inbound Vector Locked',
-      message: 'Approaching Marina Bay Financial Concourse in 1.8 mins (P99: 0.04m)',
-      routeNumber: 'HSR-01'
+  const handleToggleFavoriteStop = (stop: BusStopDetail) => {
+    setFavorites((prev) => {
+      const exists = prev.some((f) => f.type === 'stop' && f.busStopCode === stop.code);
+      if (exists) {
+        return prev.filter((f) => !(f.type === 'stop' && f.busStopCode === stop.code));
+      } else {
+        const newItem: FavoriteItem = {
+          id: stop.code,
+          type: 'stop',
+          busStopCode: stop.code,
+          busStopName: stop.name,
+          roadName: stop.roadName,
+          addedAt: Date.now()
+        };
+        return [newItem, ...prev];
+      }
     });
-    setShowToast(true);
   };
 
-  const handleViewAdvisoryDetails = (advisoryTitle: string) => {
-    const alert =
-      ACTIVE_ALERTS_DATA.find((a) => a.title.includes(advisoryTitle) || advisoryTitle.includes(a.title)) ||
-      ACTIVE_ALERTS_DATA[0];
-    setActiveAlertDetail(alert);
+  const handleToggleFavoriteService = (stop: BusStopDetail, serviceNo: string) => {
+    const id = `${stop.code}-${serviceNo}`;
+    setFavorites((prev) => {
+      const exists = prev.some((f) => f.id === id);
+      if (exists) {
+        return prev.filter((f) => f.id !== id);
+      } else {
+        const newItem: FavoriteItem = {
+          id,
+          type: 'service',
+          busStopCode: stop.code,
+          busStopName: stop.name,
+          roadName: stop.roadName,
+          serviceNo,
+          addedAt: Date.now()
+        };
+        return [newItem, ...prev];
+      }
+    });
   };
 
-  const handleViewAlternatives = (alert: NetworkAlert) => {
-    setActiveAlertDetail(alert);
+  const handleRemoveFavorite = (id: string) => {
+    setFavorites((prev) => prev.filter((f) => f.id !== id));
+  };
+
+  const handleSelectStopCode = (code: string) => {
+    setActiveStopCode(code);
+    setCurrentTab('buses');
   };
 
   return (
     <div
-      id="aether-quant-app"
-      className={`min-h-screen w-full transition-colors duration-200 ${
-        theme === 'dark' ? 'bg-[#06080d] text-slate-100' : 'bg-slate-100 text-slate-900'
+      id="sg-bus-app"
+      className={`min-h-screen flex flex-col transition-colors duration-200 ${
+        theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
       }`}
     >
-      {/* Fixed Sidebar */}
-      <Sidebar
-        currentTab={currentTab}
-        onTabChange={setCurrentTab}
-        theme={theme}
-        unreadAlertsCount={2}
-      />
-
-      {/* Fixed Top Header */}
-      <Header
+      {/* Universal Top Navigation Header */}
+      <SimpleHeader
         theme={theme}
         onToggleTheme={toggleTheme}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        stops={stops}
-        onSelectStop={(stop) => {
-          setSelectedStop(stop);
-          if (currentTab !== 'dashboard' && currentTab !== 'nearby-stops') {
-            setCurrentTab('nearby-stops');
-          }
-        }}
-        activeCity={activeCity}
-        onChangeCity={setActiveCity}
-        unreadCount={2}
-        onOpenNotifications={() => setCurrentTab('alerts')}
+        currentTab={currentTab}
+        onTabChange={setCurrentTab}
+        favoritesCount={favorites.length}
+        isBackendConnected={isBackendConnected}
       />
 
-      {/* Main Content Area */}
-      <main className="ml-72 pt-16 min-h-screen overflow-hidden">
-        {currentTab === 'dashboard' && (
-          <DashboardView
+      {/* Main View Container */}
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        {currentTab === 'buses' && (
+          <BusArrivalsView
             theme={theme}
-            activeCity={activeCity}
-            stops={stops}
-            selectedStop={selectedStop}
-            onSelectStop={handleSelectStop}
-            onViewSchedule={handleOpenSchedule}
-            onViewAdvisoryDetails={handleViewAdvisoryDetails}
-            onSimulateArrival={handleSimulateArrival}
+            initialStopCode={activeStopCode}
+            onSelectStopCode={setActiveStopCode}
+            favorites={favorites}
+            onToggleFavoriteStop={handleToggleFavoriteStop}
+            onToggleFavoriteService={handleToggleFavoriteService}
           />
         )}
 
-        {currentTab === 'nearby-stops' && (
+        {currentTab === 'favorites' && (
+          <FavoritesView
+            theme={theme}
+            favorites={favorites}
+            onSelectStopCode={handleSelectStopCode}
+            onRemoveFavorite={handleRemoveFavorite}
+            onGoToSearch={() => setCurrentTab('buses')}
+          />
+        )}
+
+        {currentTab === 'nearby' && (
           <NearbyStopsView
             theme={theme}
-            activeCity={activeCity}
-            stops={stops}
-            selectedStop={selectedStop}
-            onSelectStop={handleSelectStop}
-            onViewSchedule={handleOpenSchedule}
+            onSelectStopCode={handleSelectStopCode}
           />
         )}
 
-        {currentTab === 'saved-routes' && (
-          <SavedRoutesView
+        {currentTab === 'carparks' && (
+          <CarparksView
             theme={theme}
-            onViewScheduleForRoute={handleOpenScheduleForRoute}
-            onSimulateArrival={handleSimulateArrival}
           />
         )}
 
-        {currentTab === 'alerts' && (
-          <AlertsView
-            theme={theme}
-            onNavigateToWeather={() => setCurrentTab('weather-hub')}
-            onViewAlternatives={handleViewAlternatives}
-            onSimulateArrival={handleSimulateArrival}
-          />
-        )}
-
-        {currentTab === 'weather-hub' && (
-          <WeatherHubView
-            theme={theme}
-            activeCity={activeCity}
-          />
-        )}
-
-        {currentTab === 'lta-live' && (
-          <LtaLiveFeedView
+        {currentTab === 'trains' && (
+          <MrtStatusView
             theme={theme}
           />
         )}
       </main>
 
-      {/* Schedule Timetable Modal */}
-      {(scheduleModalStop || scheduleModalRoute) && (
-        <ScheduleModal
-          theme={theme}
-          stop={scheduleModalStop}
-          routeNumber={scheduleModalRoute}
-          onClose={() => {
-            setScheduleModalStop(null);
-            setScheduleModalRoute(undefined);
-          }}
-        />
-      )}
-
-      {/* Disruption Alternatives Modal */}
-      {activeAlertDetail && (
-        <AlternativesModal
-          theme={theme}
-          alert={activeAlertDetail}
-          onClose={() => setActiveAlertDetail(null)}
-        />
-      )}
-
-      {/* Arrival Push Notification Toast Banner */}
-      {showToast && (
-        <NotificationToast
-          theme={theme}
-          title={toastMessage.title}
-          message={toastMessage.message}
-          routeNumber={toastMessage.routeNumber}
-          onClose={() => setShowToast(false)}
-        />
-      )}
+      {/* Simple, Timeless Footer */}
+      <footer
+        className={`w-full border-t py-6 text-center text-xs transition-colors mt-auto ${
+          theme === 'dark'
+            ? 'border-slate-900 bg-slate-950 text-slate-500'
+            : 'border-slate-200 bg-white text-slate-400'
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="flex items-center gap-2 font-medium">
+            <span>SG BUS</span>
+            <span>•</span>
+            <span>Real-time public transport companion for Singapore commuters</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span>Powered by LTA DataMall</span>
+            <span>•</span>
+            <span>Auto-refresh 20s</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

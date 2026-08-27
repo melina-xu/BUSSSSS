@@ -1,3 +1,5 @@
+import { BusArrivalInfo } from '../types';
+
 /**
  * Client-side service to communicate with backend /api/lta/* routes.
  * No API credentials are stored or handled in the client.
@@ -28,6 +30,61 @@ export interface LTABusArrivalResponse {
   BusStopCode: string;
   Services: LTABusServiceArrival[];
 }
+
+export function parseLtaBus(nextBus?: LTANextBus) {
+  if (!nextBus || !nextBus.EstimatedArrival) {
+    return {
+      arrivalMins: null,
+      arrivalText: 'No est.',
+      load: 'SEA',
+      loadLabel: 'No info',
+      loadColor: 'green' as const,
+      type: 'SD',
+      typeLabel: 'Single Deck',
+      feature: undefined
+    };
+  }
+
+  const mins = getMinutesUntil(nextBus.EstimatedArrival);
+  const text = formatArrivalText(mins);
+
+  let loadLabel = 'Seats Available';
+  let loadColor: 'green' | 'amber' | 'red' = 'green';
+  if (nextBus.Load === 'SDA') {
+    loadLabel = 'Standing Available';
+    loadColor = 'amber';
+  } else if (nextBus.Load === 'LSD') {
+    loadLabel = 'Crowded / Limited Standing';
+    loadColor = 'red';
+  }
+
+  let typeLabel = 'Single Deck';
+  if (nextBus.Type === 'DD') typeLabel = 'Double Deck';
+  if (nextBus.Type === 'BD') typeLabel = 'Bendy Bus';
+
+  return {
+    arrivalMins: mins,
+    arrivalText: text,
+    load: nextBus.Load || 'SEA',
+    loadLabel,
+    loadColor,
+    type: nextBus.Type || 'SD',
+    typeLabel,
+    feature: nextBus.Feature
+  };
+}
+
+export function mapLtaToBusArrivalInfo(raw: LTABusArrivalResponse): BusArrivalInfo[] {
+  if (!raw.Services || !Array.isArray(raw.Services)) return [];
+  return raw.Services.map((srv) => ({
+    serviceNo: srv.ServiceNo,
+    operator: srv.Operator || 'SBS / SMRT / Tower Transit',
+    nextBus: parseLtaBus(srv.NextBus),
+    nextBus2: srv.NextBus2?.EstimatedArrival ? parseLtaBus(srv.NextBus2) : undefined,
+    nextBus3: srv.NextBus3?.EstimatedArrival ? parseLtaBus(srv.NextBus3) : undefined
+  }));
+}
+
 
 export interface LTACarparkItem {
   CarParkID: string;
