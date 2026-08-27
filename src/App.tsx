@@ -8,6 +8,7 @@ import { NearbyStopsView } from './components/NearbyStopsView';
 import { SavedRoutesView } from './components/SavedRoutesView';
 import { AlertsView } from './components/AlertsView';
 import { WeatherHubView } from './components/WeatherHubView';
+import { LtaLiveFeedView } from './components/LtaLiveFeedView';
 import { ScheduleModal } from './components/ScheduleModal';
 import { NotificationToast } from './components/NotificationToast';
 import { AlternativesModal } from './components/AlternativesModal';
@@ -159,6 +160,12 @@ export default function App() {
           <WeatherHubView
             theme={theme}
             activeCity={activeCity}
+          />
+        )}
+
+        {currentTab === 'lta-live' && (
+          <LtaLiveFeedView
+            theme={theme}
           />
         )}
       </main>

@@ -43,6 +43,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badge: unreadAlertsCount > 0 ? `${unreadAlertsCount}` : undefined
     },
     {
+      id: 'lta-live',
+      label: 'LTA DataMall Ingress',
+      subLabel: 'v3 Bus, Lots & Alerts',
+      icon: 'sensors',
+      badge: 'LIVE'
+    },
+    {
       id: 'weather-hub',
       label: 'Doppler Atmospheric',
       subLabel: 'Friction Index Matrix',

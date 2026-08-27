@@ -1,6 +1,6 @@
 export type ThemeMode = 'light' | 'dark';
 
-export type NavTab = 'dashboard' | 'nearby-stops' | 'saved-routes' | 'alerts' | 'weather-hub';
+export type NavTab = 'dashboard' | 'nearby-stops' | 'saved-routes' | 'alerts' | 'weather-hub' | 'lta-live';
 
 export type TransportMode = 'all' | 'bus' | 'subway' | 'train' | 'ferry';
 
