@@ -1,6 +1,27 @@
 import { LocationPoint, JourneyOption, RouteLeg, SingaporeWeather, BusArrival } from '../types';
 import { POPULAR_LOCATIONS, MRT_STATIONS, BUS_STOPS, MOCK_BUS_ARRIVALS, MRT_LINE_COLORS, DEFAULT_WEATHER_ZONES } from '../data/singaporeTransitData';
 
+function getLocalApiHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {};
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem('sg_transit_settings');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.ltaApiKey) {
+          headers['x-lta-account-key'] = parsed.ltaApiKey;
+        }
+        if (parsed.oneMapApiKey) {
+          headers['x-onemap-token'] = parsed.oneMapApiKey;
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return headers;
+}
+
 // Distance calculation using Haversine formula
 export function calculateDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371; // Earth radius in km
@@ -71,7 +92,9 @@ export async function searchSingaporeLocations(query: string): Promise<LocationP
   // Attempt backend OneMap API call
   let apiResults: LocationPoint[] = [];
   try {
-    const response = await fetch(`/api/onemap/search?searchVal=${encodeURIComponent(query)}`);
+    const response = await fetch(`/api/onemap/search?searchVal=${encodeURIComponent(query)}`, {
+      headers: { ...getLocalApiHeaders() },
+    });
     if (response.ok) {
       const data = await response.json();
       if (data.results && Array.isArray(data.results) && data.results.length > 0) {
@@ -417,7 +440,9 @@ export async function fetchLiveBusArrivals(busStopCode: string, serviceNo?: stri
       url += `&ServiceNo=${encodeURIComponent(serviceNo)}`;
     }
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: { ...getLocalApiHeaders() },
+    });
     if (response.ok) {
       const data = await response.json();
       if (data.Services && data.Services.length > 0) {
@@ -491,7 +516,9 @@ export async function fetchLiveBusArrivals(busStopCode: string, serviceNo?: stri
 // Live LTA Train Service Alerts (proxied via backend /api/lta/train-alerts)
 export async function fetchLiveTrainAlerts() {
   try {
-    const response = await fetch('/api/lta/train-alerts');
+    const response = await fetch('/api/lta/train-alerts', {
+      headers: { ...getLocalApiHeaders() },
+    });
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -505,7 +532,9 @@ export async function fetchLiveTrainAlerts() {
 // Live LTA Traffic Incidents (proxied via backend /api/lta/traffic-incidents)
 export async function fetchLiveTrafficIncidents() {
   try {
-    const response = await fetch('/api/lta/traffic-incidents');
+    const response = await fetch('/api/lta/traffic-incidents', {
+      headers: { ...getLocalApiHeaders() },
+    });
     if (response.ok) {
       const data = await response.json();
       return data;

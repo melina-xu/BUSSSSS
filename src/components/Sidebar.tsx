@@ -10,7 +10,8 @@ import {
   HelpCircle, 
   Sparkles,
   Train,
-  Route
+  Route,
+  MessageSquare
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -121,6 +122,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center justify-between flex-1">
               <span>Rail Status</span>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse border border-slate-900"></span>
+            </div>
+          </button>
+
+          {/* Community Forum (Disqus) */}
+          <button
+            id="nav-community"
+            onClick={() => onSelectTab('community')}
+            className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl border-2 transition-all duration-100 text-left font-black text-xs uppercase tracking-wider ${
+              activeTab === 'community'
+                ? 'bg-sky-500 text-white border-slate-900 bento-shadow translate-x-0.5'
+                : 'bg-white border-transparent text-slate-700 hover:border-slate-900 hover:bg-slate-100 hover:bento-shadow-sm'
+            }`}
+          >
+            <MessageSquare className={`w-4 h-4 ${activeTab === 'community' ? 'text-white' : 'text-slate-900'}`} />
+            <div className="flex items-center justify-between flex-1">
+              <span>Commuter Chat</span>
+              <span className="text-[9px] bg-amber-300 text-slate-900 font-black px-1.5 py-0.5 rounded border border-slate-900">
+                DISQUS
+              </span>
             </div>
           </button>
         </div>

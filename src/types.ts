@@ -1,4 +1,4 @@
-export type NavigationTab = 'plan' | 'live-map' | 'saved' | 'status' | 'arrivals';
+export type NavigationTab = 'plan' | 'live-map' | 'saved' | 'status' | 'arrivals' | 'community';
 
 export interface LocationPoint {
   id: string;

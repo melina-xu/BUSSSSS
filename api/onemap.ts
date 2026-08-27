@@ -10,8 +10,19 @@ import { Request, Response } from 'express';
  * Authorization: process.env.ONEMAP_TOKEN
  */
 
+function getOneMapToken(req: Request): string | null {
+  const rawToken = (req.headers['x-onemap-token'] as string) || 
+                   (req.headers['authorization'] as string) || 
+                   process.env.ONEMAP_TOKEN || 
+                   process.env.ONEMAP_API_TOKEN;
+  if (!rawToken) return null;
+  // Clean surrounding quotes and whitespace
+  const clean = rawToken.trim().replace(/^["']|["']$/g, '').trim();
+  return clean;
+}
+
 export async function handleOneMapRoute(req: Request, res: Response): Promise<void> {
-  const token = process.env.ONEMAP_TOKEN || process.env.ONEMAP_API_TOKEN;
+  const token = getOneMapToken(req);
 
   if (!token) {
     res.status(500).json({ error: 'credential not configured' });
@@ -30,12 +41,13 @@ export async function handleOneMapRoute(req: Request, res: Response): Promise<vo
   }
 
   try {
+    const authHeader = token.toLowerCase().startsWith('bearer ') ? token : `Bearer ${token}`;
     const url = `https://www.onemap.gov.sg/api/public/routingsvc/route?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&routeType=${encodeURIComponent(routeType)}`;
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        Authorization: token.startsWith('Bearer ') ? token : `Bearer ${token}`,
+        Authorization: authHeader,
         accept: 'application/json',
       },
     });

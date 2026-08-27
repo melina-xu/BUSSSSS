@@ -9,8 +9,15 @@ import { Request, Response } from 'express';
  * - Train Service Alerts: https://datamall2.mytransport.sg/ltaodataservice/TrainServiceAlerts
  */
 
+function getLtaKey(req: Request): string | null {
+  const rawKey = (req.headers['x-lta-account-key'] as string) || process.env.LTA_ACCOUNT_KEY || process.env.LTA_API_KEY;
+  if (!rawKey) return null;
+  // Clean surrounding quotes and whitespace
+  return rawKey.trim().replace(/^["']|["']$/g, '').trim();
+}
+
 export async function handleBusArrival(req: Request, res: Response): Promise<void> {
-  const accountKey = process.env.LTA_ACCOUNT_KEY;
+  const accountKey = getLtaKey(req);
 
   if (!accountKey) {
     res.status(500).json({ error: 'credential not configured' });
@@ -57,8 +64,8 @@ export async function handleBusArrival(req: Request, res: Response): Promise<voi
   }
 }
 
-export async function handleTrafficIncidents(_req: Request, res: Response): Promise<void> {
-  const accountKey = process.env.LTA_ACCOUNT_KEY;
+export async function handleTrafficIncidents(req: Request, res: Response): Promise<void> {
+  const accountKey = getLtaKey(req);
 
   if (!accountKey) {
     res.status(500).json({ error: 'credential not configured' });
@@ -93,8 +100,8 @@ export async function handleTrafficIncidents(_req: Request, res: Response): Prom
   }
 }
 
-export async function handleTrainAlerts(_req: Request, res: Response): Promise<void> {
-  const accountKey = process.env.LTA_ACCOUNT_KEY;
+export async function handleTrainAlerts(req: Request, res: Response): Promise<void> {
+  const accountKey = getLtaKey(req);
 
   if (!accountKey) {
     res.status(500).json({ error: 'credential not configured' });

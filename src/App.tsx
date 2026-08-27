@@ -13,6 +13,7 @@ import { LiveMap } from './components/LiveMap';
 import { ArrivalsBoard } from './components/ArrivalsBoard';
 import { SavedRoutes } from './components/SavedRoutes';
 import { ServiceStatus } from './components/ServiceStatus';
+import { CommunityDiscussions } from './components/CommunityDiscussions';
 import { SettingsModal, UpgradeModal, HelpModal } from './components/Modals';
 import { fetchSingaporeRealtimeWeather } from './services/apiService';
 import { POPULAR_LOCATIONS } from './data/singaporeTransitData';
@@ -209,6 +210,10 @@ export default function App() {
 
             {activeTab === 'status' && (
               <ServiceStatus />
+            )}
+
+            {activeTab === 'community' && (
+              <CommunityDiscussions />
             )}
 
             {activeTab === 'live-map' && (

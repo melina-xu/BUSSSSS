@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationTab } from '../types';
-import { Route, Map as MapIcon, Clock, AlertTriangle, Settings, Sparkles } from 'lucide-react';
+import { Route, Map as MapIcon, Clock, AlertTriangle, Settings, Sparkles, MessageSquare } from 'lucide-react';
 
 interface HeaderProps {
   onOpenSettings: () => void;
@@ -96,7 +96,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onSelectTab }) 
 
       <button
         onClick={() => onSelectTab('status')}
-        className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl border-2 transition-transform duration-100 ${
+        className={`flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl border-2 transition-transform duration-100 ${
           activeTab === 'status'
             ? 'bg-rose-500 text-white border-slate-900 bento-shadow-sm'
             : 'border-transparent text-slate-600 hover:text-slate-900'
@@ -104,6 +104,18 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onSelectTab }) 
       >
         <AlertTriangle className="w-4 h-4" />
         <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Status</span>
+      </button>
+
+      <button
+        onClick={() => onSelectTab('community')}
+        className={`flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl border-2 transition-transform duration-100 ${
+          activeTab === 'community'
+            ? 'bg-sky-500 text-white border-slate-900 bento-shadow-sm'
+            : 'border-transparent text-slate-600 hover:text-slate-900'
+        }`}
+      >
+        <MessageSquare className="w-4 h-4" />
+        <span className="text-[9px] font-black uppercase tracking-wider mt-0.5">Chat</span>
       </button>
     </nav>
   );
