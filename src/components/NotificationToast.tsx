@@ -33,45 +33,46 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
       className="fixed top-20 right-6 z-50 max-w-sm w-full animate-bounce-short select-none"
     >
       <div
-        className={`rounded-2xl p-4 shadow-2xl border flex items-start gap-3 backdrop-blur-xl transition-all ${
+        className={`rounded-3xl p-4 shadow-2xl border flex items-start gap-3 backdrop-blur-xl transition-all ${
           isDark
-            ? 'bg-[#1c1b1b]/95 border-[#37ab2e] text-[#e5e2e1] shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
-            : 'bg-white/95 border-[#006e05] text-[#1b1c1c] shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
+            ? 'bg-[#20121e]/95 border-pink-500 text-pink-50 shadow-[0_10px_30px_rgba(244,114,182,0.25)]'
+            : 'bg-white/95 border-pink-400 text-[#371329] shadow-[0_10px_30px_rgba(244,114,182,0.2)]'
         }`}
       >
-        {/* Bus badge */}
-        <div className="w-10 h-10 rounded-xl bg-[#006e05] text-white flex items-center justify-center shrink-0 shadow-md">
-          <span className="material-symbols-outlined text-[22px]">directions_bus</span>
+        {/* Cute Blossom Icon */}
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shrink-0 shadow-md shadow-pink-500/25">
+          <span className="material-symbols-outlined text-[22px]">favorite</span>
         </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <span className="font-black text-sm">{title}</span>
-              <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-[#1e88e5] text-white">
+              <span className="font-extrabold text-sm">{title}</span>
+              <span className="text-[10px] font-black px-2 py-0.2 rounded-full bg-pink-500 text-white">
                 {routeNumber}
               </span>
             </div>
-            <span className="text-[10px] text-gray-400 font-semibold">Just now</span>
+            <span className="text-[10px] text-pink-400 font-bold">Just now 🌸</span>
           </div>
 
-          <p className="text-xs text-gray-400 mt-1 leading-snug">{message}</p>
+          <p className="text-xs text-pink-600 dark:text-pink-200/80 mt-1 leading-snug font-medium">
+            {message}
+          </p>
 
-          <div className="flex items-center gap-2 mt-2">
-            <span className="w-2 h-2 rounded-full bg-[#1e88e5] animate-ping" />
-            <span className="text-[11px] font-bold text-[#1e88e5]">Approaching in 2 stops</span>
+          <div className="mt-2 flex items-center justify-between">
+            <span className="text-[10px] font-extrabold text-rose-500 flex items-center gap-1">
+              <span>✨</span>
+              <span>Arriving on schedule</span>
+            </span>
+            <button
+              onClick={onClose}
+              className="text-[10px] font-bold text-pink-400 hover:text-pink-600"
+            >
+              Dismiss
+            </button>
           </div>
         </div>
-
-        {/* Close */}
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-gray-200 p-1"
-          title="Dismiss"
-        >
-          <span className="material-symbols-outlined text-[18px]">close</span>
-        </button>
       </div>
     </div>
   );

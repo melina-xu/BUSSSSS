@@ -2,39 +2,39 @@
 
 @layer base {
   :root {
-    --bg-primary: #006e05;
-    --bg-primary-container: #37ab2e;
-    --color-status-on-time: #37ab2e;
-    --color-status-delayed: #e65100;
-    --color-status-critical: #d32f2f;
-    --color-status-arriving: #1e88e5;
+    --bg-primary: #ec4899;
+    --bg-primary-container: #f43f5e;
+    --color-status-on-time: #10b981;
+    --color-status-delayed: #f59e0b;
+    --color-status-critical: #f43f5e;
+    --color-status-arriving: #ec4899;
   }
 
   .dark {
-    --bg-primary: #6cdf5c;
-    --bg-primary-container: #37ab2e;
-    --color-status-on-time: #37ab2e;
-    --color-status-delayed: #ff9800;
-    --color-status-critical: #f44336;
-    --color-status-arriving: #1e88e5;
+    --bg-primary: #f472b6;
+    --bg-primary-container: #db2777;
+    --color-status-on-time: #34d399;
+    --color-status-delayed: #fbbf24;
+    --color-status-critical: #fb7185;
+    --color-status-arriving: #f472b6;
   }
 
   body {
     overscroll-behavior: none;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 }
 
 /* Custom utility styles */
 .font-timer-display {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -42,12 +42,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(140, 140, 140, 0.3);
+  background: rgba(244, 114, 182, 0.25);
   border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(140, 140, 140, 0.6);
+  background: rgba(236, 72, 153, 0.5);
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -59,18 +59,32 @@
   scrollbar-width: none;
 }
 
-@keyframes pulseGlow {
+@keyframes pulseGlowPink {
   0%, 100% {
     opacity: 1;
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
     transform: scale(1);
   }
   50% {
-    opacity: 0.7;
-    transform: scale(1.05);
+    opacity: 0.85;
+    box-shadow: 0 0 25px rgba(236, 72, 153, 0.7);
+    transform: scale(1.04);
   }
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-glow-pink {
+  animation: pulseGlowPink 2.5s infinite ease-in-out;
 }
 
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-float {
+  animation: floatGentle 3s ease-in-out infinite;
+}

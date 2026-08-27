@@ -26,8 +26,8 @@ export default function App() {
   const [activeAlertDetail, setActiveAlertDetail] = useState<NetworkAlert | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({
-    title: 'Bus 196 Arriving',
-    message: 'Arriving at Aft Capitol Theatre in 2 mins.',
+    title: 'Bus 196 Arriving ✨',
+    message: 'Arriving at Capitol Sakura Concourse in 2 mins 🌸',
     routeNumber: '196'
   });
 
@@ -60,8 +60,8 @@ export default function App() {
 
   const handleSimulateArrival = () => {
     setToastMessage({
-      title: 'Bus 196 Arriving',
-      message: 'Arriving at Aft Capitol Theatre in 2 mins.',
+      title: 'Bus 196 Arriving ✨',
+      message: 'Arriving at Capitol Sakura Concourse in 2 mins 🌸',
       routeNumber: '196'
     });
     setShowToast(true);
@@ -80,9 +80,9 @@ export default function App() {
 
   return (
     <div
-      id="urban-kinetic-app"
+      id="urban-blossom-app"
       className={`min-h-screen w-full transition-colors duration-200 ${
-        theme === 'dark' ? 'bg-[#131313] text-[#e5e2e1]' : 'bg-[#fbf9f8] text-[#1b1c1c]'
+        theme === 'dark' ? 'bg-[#140b15] text-[#fce7f3]' : 'bg-[#fff5f8] text-[#371329]'
       }`}
     >
       {/* Fixed Sidebar */}
@@ -198,4 +198,3 @@ export default function App() {
     </div>
   );
 }
-

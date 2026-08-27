@@ -56,7 +56,6 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
     const routes = getRoutePlans(origin, destination, travelMode);
     setAvailableRoutes(routes);
     if (routes.length > 0) {
-      // If current selected route isn't in new mode, select first
       if (!selectedRoute || selectedRoute.mode !== travelMode) {
         onSelectRoute(routes[0]);
       } else {
@@ -100,36 +99,42 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
 
   return (
     <div
-      id="google-maps-route-planner"
-      className={`rounded-2xl shadow-2xl border transition-all duration-300 backdrop-blur-xl flex flex-col z-30 ${
+      id="girly-route-planner"
+      className={`rounded-3xl shadow-2xl border transition-all duration-300 backdrop-blur-xl flex flex-col z-30 overflow-hidden ${
         isDark
-          ? 'bg-[#181818]/95 border-[#2e2e2e] text-[#e5e2e1]'
-          : 'bg-white/95 border-[#becab6] text-[#1b1c1c]'
-      } ${isCollapsed ? 'w-80 md:w-96' : 'w-full md:w-[410px]'} ${className}`}
+          ? 'bg-[#1e131f]/95 border-[#381a34] text-pink-50'
+          : 'bg-white/95 border-pink-200 text-[#371329]'
+      } ${isCollapsed ? 'w-80 md:w-96' : 'w-full md:w-[420px]'} ${className}`}
     >
       {/* Top Header & Mode Selector */}
       <div
-        className={`p-3.5 border-b flex flex-col gap-2.5 ${
-          isDark ? 'bg-[#1e1e1e] border-[#2e2e2e]' : 'bg-[#f7f6f5] border-[#becab6]'
+        className={`p-4 border-b flex flex-col gap-3 ${
+          isDark ? 'bg-[#251527] border-[#381a34]' : 'bg-[#fff5f8] border-pink-200'
         }`}
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#006e05] text-white flex items-center justify-center shadow-sm">
-              <span className="material-symbols-outlined text-[18px]">alt_route</span>
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shadow-md shadow-pink-500/25">
+              <span className="material-symbols-outlined text-[19px]">alt_route</span>
             </div>
-            <span className="font-bold text-sm tracking-tight">Directions & Routing</span>
+            <div>
+              <span className="font-extrabold text-sm tracking-tight flex items-center gap-1">
+                <span>Trip & Route Planner</span>
+                <span className="text-xs">🌸</span>
+              </span>
+              <p className="text-[10px] text-pink-500 font-medium">Smart multi-modal directions</p>
+            </div>
           </div>
 
           <div className="flex items-center gap-1">
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
-                isDark ? 'hover:bg-[#2a2a2a] text-gray-400' : 'hover:bg-[#e4e2e2] text-gray-600'
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                isDark ? 'hover:bg-[#381a34] text-pink-300' : 'hover:bg-pink-100 text-pink-700'
               }`}
               title={isCollapsed ? 'Expand panel' : 'Collapse panel'}
             >
-              <span className="material-symbols-outlined text-[18px]">
+              <span className="material-symbols-outlined text-[20px]">
                 {isCollapsed ? 'expand_more' : 'expand_less'}
               </span>
             </button>
@@ -138,80 +143,71 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
 
         {/* Travel Mode Switcher Tabs (Transit / Car / Walk) */}
         <div
-          className={`grid grid-cols-3 p-1 rounded-xl border ${
-            isDark ? 'bg-[#131313] border-[#2e2e2e]' : 'bg-[#e9e8e7] border-[#becab6]'
+          className={`grid grid-cols-3 p-1 rounded-2xl border ${
+            isDark ? 'bg-[#180e19] border-[#381a34]' : 'bg-pink-100/60 border-pink-200'
           }`}
         >
           <button
             onClick={() => onTravelModeChange('transit')}
-            className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
               travelMode === 'transit'
-                ? isDark
-                  ? 'bg-[#37ab2e] text-[#003701] shadow-md'
-                  : 'bg-[#006e05] text-white shadow-md'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/30'
                 : isDark
-                ? 'text-gray-400 hover:text-white'
-                : 'text-gray-600 hover:text-black'
+                ? 'text-pink-300 hover:text-white'
+                : 'text-[#63214c] hover:text-pink-700'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">directions_transit</span>
-            <span>Transit</span>
+            <span className="material-symbols-outlined text-[17px]">directions_transit</span>
+            <span>Transit 🌸</span>
           </button>
 
           <button
             onClick={() => onTravelModeChange('car')}
-            className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
               travelMode === 'car'
-                ? isDark
-                  ? 'bg-[#37ab2e] text-[#003701] shadow-md'
-                  : 'bg-[#006e05] text-white shadow-md'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/30'
                 : isDark
-                ? 'text-gray-400 hover:text-white'
-                : 'text-gray-600 hover:text-black'
+                ? 'text-pink-300 hover:text-white'
+                : 'text-[#63214c] hover:text-pink-700'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">directions_car</span>
-            <span>Driving</span>
+            <span className="material-symbols-outlined text-[17px]">directions_car</span>
+            <span>Drive 🚗</span>
           </button>
 
           <button
             onClick={() => onTravelModeChange('walk')}
-            className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
               travelMode === 'walk'
-                ? isDark
-                  ? 'bg-[#37ab2e] text-[#003701] shadow-md'
-                  : 'bg-[#006e05] text-white shadow-md'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/30'
                 : isDark
-                ? 'text-gray-400 hover:text-white'
-                : 'text-gray-600 hover:text-black'
+                ? 'text-pink-300 hover:text-white'
+                : 'text-[#63214c] hover:text-pink-700'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">directions_walk</span>
-            <span>Walk</span>
+            <span className="material-symbols-outlined text-[17px]">directions_walk</span>
+            <span>Walk 👟</span>
           </button>
         </div>
-      </div>
 
-      {/* Origin and Destination Input Box */}
-      <div className="p-3.5 border-b border-inherit relative">
-        <div className="flex items-center gap-2">
-          {/* Visual Track Line Indicator */}
-          <div className="flex flex-col items-center py-2 shrink-0">
-            <div className="w-3.5 h-3.5 rounded-full border-2 border-[#006e05] bg-white flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#006e05]"></div>
+        {/* Input Fields for Starting Point & Destination */}
+        <div className="relative flex items-center gap-2">
+          {/* Visual Track Line between Origin & Destination */}
+          <div className="flex flex-col items-center ml-1 shrink-0">
+            <div className="w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-[10px] font-black shadow-sm ring-2 ring-pink-200 dark:ring-pink-900">
+              A
             </div>
-            <div className={`w-0.5 h-7 border-l-2 border-dotted my-0.5 ${isDark ? 'border-gray-600' : 'border-gray-400'}`}></div>
-            <div className="w-3.5 h-3.5 rounded-full bg-[#d32f2f] flex items-center justify-center">
-              <span className="material-symbols-outlined text-[10px] text-white font-black">place</span>
+            <div className="w-0.5 h-6 bg-gradient-to-b from-rose-400 to-pink-400 my-0.5 stroke-dashed"></div>
+            <div className="w-6 h-6 rounded-full bg-pink-600 text-white flex items-center justify-center text-[10px] font-black shadow-sm ring-2 ring-pink-200 dark:ring-pink-900">
+              B
             </div>
           </div>
 
-          {/* Input Fields */}
-          <div className="flex-1 flex flex-col gap-2">
-            {/* Origin Input */}
+          {/* Text Inputs */}
+          <div className="flex-1 flex flex-col gap-2 min-w-0">
+            {/* Origin Input (A) */}
             <div className="relative">
               <input
-                id="origin-location-input"
                 type="text"
                 value={originText}
                 onChange={(e) => {
@@ -219,11 +215,11 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                   setShowOriginDropdown(true);
                 }}
                 onFocus={() => setShowOriginDropdown(true)}
-                placeholder="Choose starting point or click map..."
-                className={`w-full text-xs font-medium py-2 pl-3 pr-7 rounded-xl transition-all focus:outline-none ${
+                placeholder="Choose starting point 🍓"
+                className={`w-full py-2 pl-3 pr-8 rounded-xl text-xs font-semibold focus:outline-none transition-all ${
                   isDark
-                    ? 'bg-[#222222] text-[#e5e2e1] placeholder-gray-500 border border-[#333333] focus:border-[#6cdf5c]'
-                    : 'bg-[#f4f3f2] text-[#1b1c1c] placeholder-gray-500 border border-[#e0dedc] focus:bg-white focus:border-[#006e05] focus:ring-1 focus:ring-[#006e05]'
+                    ? 'bg-[#180e19] text-pink-100 placeholder-pink-400/50 border border-[#381a34] focus:border-pink-500'
+                    : 'bg-white text-[#371329] placeholder-pink-400 border border-pink-200 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 shadow-xs'
                 }`}
               />
               {originText && (
@@ -232,36 +228,36 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                     setOriginText('');
                     setShowOriginDropdown(true);
                   }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-pink-400 hover:text-pink-600"
                 >
-                  <span className="material-symbols-outlined text-[14px]">close</span>
+                  <span className="material-symbols-outlined text-[15px]">close</span>
                 </button>
               )}
 
-              {/* Origin Autocomplete Dropdown */}
+              {/* Origin Autocomplete Suggestions */}
               {showOriginDropdown && filteredOriginOptions.length > 0 && (
                 <div
-                  className={`absolute top-10 left-0 right-0 rounded-xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
-                    isDark ? 'bg-[#202020] border-[#383838]' : 'bg-white border-[#becab6]'
+                  className={`absolute left-0 right-0 top-10 rounded-2xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
+                    isDark ? 'bg-[#20121e] border-[#381a34]' : 'bg-white border-pink-200'
                   }`}
                 >
-                  <div className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 text-gray-400">
-                    Suggested Starting Points
+                  <div className="text-[10px] font-bold text-pink-500 px-3 py-1 uppercase tracking-wider flex items-center gap-1">
+                    <span>🍓</span> Choose Origin
                   </div>
-                  {filteredOriginOptions.map((item) => (
+                  {filteredOriginOptions.map((loc) => (
                     <div
-                      key={item.id}
-                      onClick={() => handleSelectOrigin(item)}
-                      className={`p-2 rounded-lg cursor-pointer flex items-center gap-2.5 transition-colors ${
-                        isDark ? 'hover:bg-[#2c2c2c]' : 'hover:bg-[#f5f3f3]'
+                      key={loc.id}
+                      onMouseDown={() => handleSelectOrigin(loc)}
+                      className={`p-2 rounded-xl cursor-pointer flex items-center justify-between text-xs transition-colors ${
+                        isDark ? 'hover:bg-[#2f182c]' : 'hover:bg-pink-50'
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[18px] text-[#006e05]">
-                        {item.icon}
-                      </span>
-                      <div className="min-w-0">
-                        <div className="font-bold text-xs truncate">{item.name}</div>
-                        <div className="text-[10px] text-gray-400 truncate">{item.address}</div>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="text-sm">🌸</span>
+                        <div className="truncate">
+                          <div className="font-bold text-[#371329] dark:text-pink-100">{loc.name}</div>
+                          <div className="text-[10px] text-pink-500/70 truncate">{loc.address}</div>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -269,10 +265,9 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
               )}
             </div>
 
-            {/* Destination Input */}
+            {/* Destination Input (B) */}
             <div className="relative">
               <input
-                id="destination-location-input"
                 type="text"
                 value={destText}
                 onChange={(e) => {
@@ -280,11 +275,11 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                   setShowDestDropdown(true);
                 }}
                 onFocus={() => setShowDestDropdown(true)}
-                placeholder="Choose destination..."
-                className={`w-full text-xs font-medium py-2 pl-3 pr-7 rounded-xl transition-all focus:outline-none ${
+                placeholder="Choose cute destination 💖"
+                className={`w-full py-2 pl-3 pr-8 rounded-xl text-xs font-semibold focus:outline-none transition-all ${
                   isDark
-                    ? 'bg-[#222222] text-[#e5e2e1] placeholder-gray-500 border border-[#333333] focus:border-[#6cdf5c]'
-                    : 'bg-[#f4f3f2] text-[#1b1c1c] placeholder-gray-500 border border-[#e0dedc] focus:bg-white focus:border-[#006e05] focus:ring-1 focus:ring-[#006e05]'
+                    ? 'bg-[#180e19] text-pink-100 placeholder-pink-400/50 border border-[#381a34] focus:border-pink-500'
+                    : 'bg-white text-[#371329] placeholder-pink-400 border border-pink-200 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 shadow-xs'
                 }`}
               />
               {destText && (
@@ -293,36 +288,36 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                     setDestText('');
                     setShowDestDropdown(true);
                   }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-pink-400 hover:text-pink-600"
                 >
-                  <span className="material-symbols-outlined text-[14px]">close</span>
+                  <span className="material-symbols-outlined text-[15px]">close</span>
                 </button>
               )}
 
-              {/* Destination Autocomplete Dropdown */}
+              {/* Destination Autocomplete Suggestions */}
               {showDestDropdown && filteredDestOptions.length > 0 && (
                 <div
-                  className={`absolute top-10 left-0 right-0 rounded-xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
-                    isDark ? 'bg-[#202020] border-[#383838]' : 'bg-white border-[#becab6]'
+                  className={`absolute left-0 right-0 top-10 rounded-2xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
+                    isDark ? 'bg-[#20121e] border-[#381a34]' : 'bg-white border-pink-200'
                   }`}
                 >
-                  <div className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 text-gray-400">
-                    Suggested Destinations
+                  <div className="text-[10px] font-bold text-pink-500 px-3 py-1 uppercase tracking-wider flex items-center gap-1">
+                    <span>💖</span> Choose Destination
                   </div>
-                  {filteredDestOptions.map((item) => (
+                  {filteredDestOptions.map((loc) => (
                     <div
-                      key={item.id}
-                      onClick={() => handleSelectDestination(item)}
-                      className={`p-2 rounded-lg cursor-pointer flex items-center gap-2.5 transition-colors ${
-                        isDark ? 'hover:bg-[#2c2c2c]' : 'hover:bg-[#f5f3f3]'
+                      key={loc.id}
+                      onMouseDown={() => handleSelectDestination(loc)}
+                      className={`p-2 rounded-xl cursor-pointer flex items-center justify-between text-xs transition-colors ${
+                        isDark ? 'hover:bg-[#2f182c]' : 'hover:bg-pink-50'
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[18px] text-[#d32f2f]">
-                        {item.icon}
-                      </span>
-                      <div className="min-w-0">
-                        <div className="font-bold text-xs truncate">{item.name}</div>
-                        <div className="text-[10px] text-gray-400 truncate">{item.address}</div>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="text-sm">✨</span>
+                        <div className="truncate">
+                          <div className="font-bold text-[#371329] dark:text-pink-100">{loc.name}</div>
+                          <div className="text-[10px] text-pink-500/70 truncate">{loc.address}</div>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -331,251 +326,243 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
             </div>
           </div>
 
-          {/* Swap Button */}
+          {/* Swap Origin / Destination Button */}
           <button
             onClick={handleSwap}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform hover:rotate-180 border shadow-sm ${
+            className={`w-8 h-8 rounded-full border shadow-sm flex items-center justify-center shrink-0 transition-transform active:rotate-180 ${
               isDark
-                ? 'bg-[#262626] border-[#383838] text-[#6cdf5c] hover:bg-[#333333]'
-                : 'bg-white border-[#becab6] text-[#006e05] hover:bg-[#f5f3f3]'
+                ? 'bg-[#251527] text-pink-300 border-[#381a34] hover:bg-[#381a34]'
+                : 'bg-white text-pink-600 border-pink-200 hover:bg-pink-50'
             }`}
-            title="Swap Starting point and Destination"
+            title="Swap Origin & Destination"
           >
             <span className="material-symbols-outlined text-[18px]">swap_vert</span>
           </button>
         </div>
 
-        {/* Quick Destination Chips */}
-        <div className="flex gap-1.5 pt-2.5 overflow-x-auto scrollbar-hide">
-          {POPULAR_LOCATIONS.filter((l) => l.id !== origin.id && l.id !== destination.id).slice(0, 4).map((preset) => (
+        {/* Quick Landmark Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-0.5 pt-0.5">
+          {POPULAR_LOCATIONS.slice(1, 5).map((loc) => (
             <button
-              key={preset.id}
-              onClick={() => handleSelectDestination(preset)}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all border flex items-center gap-1 ${
-                isDark
-                  ? 'bg-[#222222] border-[#333333] text-gray-300 hover:border-[#6cdf5c] hover:text-white'
-                  : 'bg-[#f4f3f2] border-[#e0dedc] text-[#3f4a3a] hover:border-[#006e05] hover:bg-white'
+              key={loc.id}
+              onClick={() => handleSelectDestination(loc)}
+              className={`px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap border transition-all ${
+                destination.id === loc.id
+                  ? 'bg-pink-500 text-white border-pink-500 shadow-xs'
+                  : isDark
+                  ? 'bg-[#180e19] text-pink-200/80 border-[#381a34] hover:border-pink-500'
+                  : 'bg-white text-pink-800 border-pink-200 hover:bg-pink-50'
               }`}
             >
-              <span className="material-symbols-outlined text-[13px] text-[#006e05]">
-                {preset.icon}
-              </span>
-              <span>{preset.name.split(' ')[0]}</span>
+              🌸 {loc.name.split(' ')[0]}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Route Options Comparison List */}
+      {/* Main Content Area: Routes List & Step Details */}
       {!isCollapsed && (
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2.5 max-h-[calc(100vh-360px)]">
-          <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400 px-1">
-            Available Routes ({availableRoutes.length})
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3.5 space-y-3 max-h-[calc(100vh-320px)]">
+          {/* Route Options Header */}
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-pink-500 flex items-center gap-1">
+              <span>✨</span>
+              <span>Recommended Routes ({availableRoutes.length})</span>
+            </span>
+            {selectedRoute && (
+              <span className="text-[11px] font-bold text-pink-500/80">
+                {selectedRoute.distanceKm} km
+              </span>
+            )}
           </div>
 
-          {availableRoutes.map((route) => {
-            const isSelected = selectedRoute?.id === route.id;
-            return (
-              <div
-                key={route.id}
-                onClick={() => onSelectRoute(route)}
-                className={`p-3 rounded-xl border transition-all cursor-pointer relative ${
-                  isSelected
-                    ? isDark
-                      ? 'bg-[#242424] border-[#6cdf5c] ring-1 ring-[#6cdf5c] shadow-lg'
-                      : 'bg-[#f5f3f3] border-[#006e05] ring-1 ring-[#006e05] shadow-md'
-                    : isDark
-                    ? 'bg-[#1e1e1e] border-[#2e2e2e] hover:bg-[#262626]'
-                    : 'bg-white border-[#becab6] hover:bg-[#faf9f8]'
-                }`}
-              >
-                {/* Route Header summary */}
-                <div className="flex items-start justify-between mb-1.5">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-timer-display text-lg font-black text-inherit">
-                        {route.durationMinutes} min
-                      </span>
-                      <span className="text-xs text-gray-400">({route.distanceKm} km)</span>
-
-                      {route.isFastest && (
-                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#37ab2e]/15 text-[#37ab2e] uppercase">
-                          Fastest
-                        </span>
-                      )}
-                      {route.trafficCondition === 'fast' && (
-                        <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500">
-                          Light Traffic
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs font-semibold text-gray-400 mt-0.5">{route.viaSummary}</p>
-                  </div>
-
-                  <div className="text-right">
-                    <div className="text-xs font-bold text-inherit">{route.arrivalTime}</div>
-                    <div className="text-[10px] text-gray-400">Arrive</div>
-                  </div>
-                </div>
-
-                {/* Transit Segment Badges */}
-                {route.transitBadges && route.transitBadges.length > 0 && (
-                  <div className="flex items-center gap-1.5 flex-wrap my-2">
-                    {route.transitBadges.map((badge, bIdx) => (
-                      <React.Fragment key={bIdx}>
-                        <span
-                          className="px-2 py-0.5 rounded-md text-[11px] font-bold flex items-center gap-1 shadow-xs"
-                          style={{ backgroundColor: badge.bg, color: badge.color }}
-                        >
-                          {badge.type === 'walk' && (
-                            <span className="material-symbols-outlined text-[13px]">directions_walk</span>
-                          )}
-                          {badge.type === 'mrt' && (
-                            <span className="material-symbols-outlined text-[13px]">train</span>
-                          )}
-                          {badge.type === 'bus' && (
-                            <span className="material-symbols-outlined text-[13px]">directions_bus</span>
-                          )}
-                          <span>{badge.label}</span>
-                        </span>
-                        {bIdx < route.transitBadges.length - 1 && (
-                          <span className="material-symbols-outlined text-[14px] text-gray-400">
-                            chevron_right
-                          </span>
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </div>
-                )}
-
-                {/* Additional metadata tags (Cost, Carbon savings, Headway) */}
-                <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1 border-t border-inherit/40 mt-2">
-                  <div className="flex items-center gap-2">
-                    {route.cost && (
-                      <span className="font-semibold text-inherit flex items-center gap-0.5">
-                        <span className="material-symbols-outlined text-[13px]">payments</span>
-                        {route.cost}
-                      </span>
-                    )}
-                    {route.carbonSavedKg !== undefined && (
-                      <span className="text-[#37ab2e] font-semibold flex items-center gap-0.5">
-                        <span className="material-symbols-outlined text-[13px]">eco</span>
-                        -{route.carbonSavedKg} kg CO₂
-                      </span>
-                    )}
-                  </div>
-
-                  <span className="text-[11px] font-medium text-inherit">
-                    Departs {route.departureTime}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Step-by-Step Navigation Drawer for Selected Route */}
-          {selectedRoute && (
-            <div
-              className={`rounded-xl border p-3 mt-2 ${
-                isDark ? 'bg-[#151515] border-[#2e2e2e]' : 'bg-[#f4f3f2] border-[#becab6]'
-              }`}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <button
-                  onClick={() => setShowStepDetails(!showStepDetails)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-inherit hover:text-[#006e05] transition-colors"
-                >
-                  <span className="material-symbols-outlined text-[16px]">
-                    {showStepDetails ? 'expand_more' : 'chevron_right'}
-                  </span>
-                  <span>Turn-by-Turn Steps ({selectedRoute.steps.length})</span>
-                </button>
-
-                <button
-                  id="start-live-navigation-btn"
-                  onClick={onToggleNavigation}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1 shadow-sm transition-all ${
-                    isNavigating
-                      ? 'bg-[#d32f2f] text-white animate-pulse'
-                      : 'bg-[#006e05] hover:bg-[#37ab2e] text-white'
+          {/* Route Options Cards */}
+          <div className="space-y-2.5">
+            {availableRoutes.map((route) => {
+              const isSelected = selectedRoute?.id === route.id;
+              return (
+                <div
+                  key={route.id}
+                  onClick={() => onSelectRoute(route)}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
+                    isSelected
+                      ? isDark
+                        ? 'bg-[#2a172a] border-pink-500 ring-2 ring-pink-500/40 shadow-lg'
+                        : 'bg-[#fff5f8] border-pink-400 ring-2 ring-pink-300 shadow-md'
+                      : isDark
+                      ? 'bg-[#180e19] border-[#381a34] hover:bg-[#241323]'
+                      : 'bg-white border-pink-200/80 hover:bg-pink-50/50'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[15px]">
-                    {isNavigating ? 'stop_circle' : 'navigation'}
+                  {/* Recommended Badge */}
+                  {route.isRecommended && (
+                    <div className="absolute top-0 right-0 bg-gradient-to-l from-rose-500 to-pink-500 text-white text-[9px] font-black uppercase px-2.5 py-0.5 rounded-bl-xl shadow-xs">
+                      💖 Sweetest Route
+                    </div>
+                  )}
+
+                  {/* Duration, Title & Arrival Time */}
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl font-black text-[#371329] dark:text-pink-100">
+                          {route.durationMinutes} min
+                        </span>
+                        {route.isFastest && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300 border border-pink-300/60">
+                            ✨ Fastest
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[11px] text-pink-500 font-medium">
+                        {route.departureTime} – {route.arrivalTime}
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      {route.cost && (
+                        <div className="text-xs font-black text-rose-500 dark:text-rose-400">
+                          {route.cost}
+                        </div>
+                      )}
+                      {route.carbonSavedKg && (
+                        <div className="text-[10px] font-bold text-pink-600 dark:text-pink-300 flex items-center justify-end gap-0.5">
+                          <span>🌸</span>
+                          <span>-{route.carbonSavedKg} kg CO₂</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Summary / Via Description */}
+                  <p className="text-xs text-[#501c3d] dark:text-pink-200/80 font-medium mb-2.5">
+                    {route.title}
+                  </p>
+
+                  {/* Transit Pill Badges */}
+                  {route.transitBadges && (
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {route.transitBadges.map((badge, bIdx) => (
+                        <React.Fragment key={bIdx}>
+                          <span
+                            className="px-2.5 py-0.5 rounded-full text-[10px] font-black shadow-xs"
+                            style={{
+                              backgroundColor: badge.type === 'walk' ? '#fce7f3' : badge.bg,
+                              color: badge.type === 'walk' ? '#be185d' : badge.color
+                            }}
+                          >
+                            {badge.label}
+                          </span>
+                          {bIdx < route.transitBadges.length - 1 && (
+                            <span className="text-[10px] text-pink-300">›</span>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Selected Route Turn-by-Turn Guidance Accordion */}
+          {selectedRoute && (
+            <div
+              className={`rounded-2xl p-3.5 border transition-all ${
+                isDark ? 'bg-[#180e19] border-[#381a34]' : 'bg-[#fff5f8]/70 border-pink-200'
+              }`}
+            >
+              <div
+                onClick={() => setShowStepDetails(!showStepDetails)}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-pink-500 text-[18px]">
+                    list_alt
                   </span>
-                  <span>{isNavigating ? 'Exit Nav' : 'Start Preview'}</span>
-                </button>
+                  <span className="font-extrabold text-xs text-[#371329] dark:text-pink-100">
+                    Turn-by-Turn Steps ({selectedRoute.steps.length})
+                  </span>
+                </div>
+                <span className="material-symbols-outlined text-[18px] text-pink-400">
+                  {showStepDetails ? 'expand_less' : 'expand_more'}
+                </span>
               </div>
 
               {showStepDetails && (
-                <div className="space-y-2.5 pt-1 border-t border-inherit/40">
-                  {selectedRoute.steps.map((step, sIdx) => {
+                <div className="mt-3.5 space-y-3 pl-1">
+                  {selectedRoute.steps.map((step, idx) => {
                     const isExpanded = expandedStepId === step.id;
                     return (
-                      <div key={step.id} className="relative pl-6 pb-2 last:pb-0">
-                        {/* Step Connection vertical timeline */}
-                        {sIdx < selectedRoute.steps.length - 1 && (
-                          <div
-                            className={`absolute left-2.5 top-5 bottom-0 w-0.5 ${
-                              isDark ? 'bg-gray-700' : 'bg-gray-300'
-                            }`}
-                          />
+                      <div key={step.id} className="relative pl-6">
+                        {/* Vertical timeline connector line */}
+                        {idx < selectedRoute.steps.length - 1 && (
+                          <div className="absolute left-[9px] top-6 bottom-0 w-0.5 bg-pink-200 dark:bg-pink-900/60" />
                         )}
 
-                        {/* Step Icon Node */}
+                        {/* Step Icon Pin */}
                         <div
-                          className={`absolute left-0 top-0.5 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-xs ${
-                            step.mode === 'mrt'
-                              ? 'bg-[#d32f2f]'
+                          className={`absolute left-0 top-0.5 w-5 h-5 rounded-full flex items-center justify-center shadow-xs ring-2 ring-white dark:ring-[#180e19] ${
+                            step.mode === 'walk'
+                              ? 'bg-pink-100 text-pink-600'
+                              : step.mode === 'mrt'
+                              ? 'bg-rose-500 text-white'
                               : step.mode === 'bus'
-                              ? 'bg-[#006e05]'
-                              : step.mode === 'car'
-                              ? 'bg-[#1e88e5]'
-                              : 'bg-gray-500'
+                              ? 'bg-pink-600 text-white'
+                              : 'bg-purple-600 text-white'
                           }`}
                         >
-                          <span className="material-symbols-outlined text-[12px]">{step.icon}</span>
+                          <span className="material-symbols-outlined text-[12px]">
+                            {step.icon}
+                          </span>
                         </div>
 
-                        {/* Step Content */}
-                        <div>
-                          <div className="flex items-baseline justify-between">
-                            <p className="text-xs font-bold leading-tight text-inherit">
+                        {/* Step Details */}
+                        <div className="min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="font-bold text-xs leading-tight text-[#371329] dark:text-pink-100">
                               {step.instruction}
-                            </p>
-                            <span className="text-[10px] font-semibold text-gray-400 shrink-0 ml-2">
-                              {step.distanceDisplay}
+                            </div>
+                            <span className="text-[10px] font-bold text-pink-500 shrink-0">
+                              {step.durationMinutes}m
                             </span>
                           </div>
 
                           {step.detail && (
-                            <p className="text-[11px] text-gray-400 mt-0.5 leading-snug">
+                            <p className="text-[11px] text-pink-600/80 dark:text-pink-300/80 mt-0.5">
                               {step.detail}
                             </p>
                           )}
 
-                          {/* Intermediate Transit Stops Breakdown */}
-                          {step.stopsList && step.stopsList.length > 0 && (
-                            <div className="mt-1">
+                          {/* Expandable intermediate stops list */}
+                          {step.stopCount && step.stopsList && (
+                            <div className="mt-1.5">
                               <button
-                                onClick={() => setExpandedStepId(isExpanded ? null : step.id)}
-                                className="text-[10px] font-bold text-[#006e05] dark:text-[#6cdf5c] flex items-center gap-0.5 hover:underline"
+                                onClick={() =>
+                                  setExpandedStepId(isExpanded ? null : step.id)
+                                }
+                                className="text-[10px] font-bold text-pink-600 dark:text-pink-300 hover:underline flex items-center gap-1"
                               >
-                                <span>{step.stopCount || step.stopsList.length} intermediate stops</span>
+                                <span>
+                                  {isExpanded ? 'Hide' : `Ride ${step.stopCount} stops`}
+                                </span>
                                 <span className="material-symbols-outlined text-[13px]">
                                   {isExpanded ? 'expand_less' : 'expand_more'}
                                 </span>
                               </button>
 
                               {isExpanded && (
-                                <ul className="pl-3 py-1 space-y-0.5 border-l border-[#006e05]/30 my-1">
-                                  {step.stopsList.map((stopName, idx) => (
-                                    <li key={idx} className="text-[10px] text-gray-400 flex items-center gap-1">
-                                      <span className="w-1 h-1 rounded-full bg-gray-400"></span>
-                                      <span>{stopName}</span>
-                                    </li>
+                                <div className="mt-2 pl-3 border-l-2 border-dashed border-pink-300 dark:border-pink-800 space-y-1">
+                                  {step.stopsList.map((stName, sIdx) => (
+                                    <div
+                                      key={sIdx}
+                                      className="text-[10px] text-[#501c3d] dark:text-pink-200/80 flex items-center gap-1.5"
+                                    >
+                                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400"></span>
+                                      <span>{stName}</span>
+                                    </div>
                                   ))}
-                                </ul>
+                                </div>
                               )}
                             </div>
                           )}
@@ -585,6 +572,27 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                   })}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Start Live Navigation Preview Button */}
+          {selectedRoute && (
+            <div className="pt-1">
+              <button
+                onClick={onToggleNavigation}
+                className={`w-full py-3 px-4 rounded-2xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 ${
+                  isNavigating
+                    ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/25'
+                    : 'bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 hover:from-pink-600 hover:to-rose-600 text-white shadow-pink-500/30 hover:scale-[1.02]'
+                }`}
+              >
+                <span className="material-symbols-outlined text-[18px]">
+                  {isNavigating ? 'stop_circle' : 'navigation'}
+                </span>
+                <span>
+                  {isNavigating ? 'Stop Live Navigation Preview' : 'Start Live Trip Preview ✨'}
+                </span>
+              </button>
             </div>
           )}
         </div>

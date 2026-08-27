@@ -1,6 +1,6 @@
 {
   "name": "Remix Urban Kinetic",
-  "description": "Smart multi-modal transit navigation, Google Maps-inspired route planner (MRT, Bus, Car, Walk), live turn-by-turn guidance, and real-time arrival telemetry.",
+  "description": "Urban Blossom: A sweet, aesthetic multi-modal transit navigation and trip planner (MRT, Bus, Car, Walk) with pastel live maps and turn-by-turn guidance.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

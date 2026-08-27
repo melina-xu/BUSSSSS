@@ -29,52 +29,61 @@ export const NearbyStopsView: React.FC<NearbyStopsViewProps> = ({
       const matchSearch =
         stop.name.toLowerCase().includes(stopSearch.toLowerCase()) ||
         stop.code.includes(stopSearch) ||
-        stop.routes.some((r) => r.routeNumber.toLowerCase().includes(stopSearch.toLowerCase()) || r.routeName.toLowerCase().includes(stopSearch.toLowerCase()));
+        stop.routes.some(
+          (r) =>
+            r.routeNumber.toLowerCase().includes(stopSearch.toLowerCase()) ||
+            r.routeName.toLowerCase().includes(stopSearch.toLowerCase())
+        );
       return matchSearch;
     })
     .sort((a, b) => (sortDistance ? a.walkTimeMins - b.walkTimeMins : 0));
 
   return (
-    <div id="nearby-stops-view" className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
-      {/* Left Panel: Stops List (450px on desktop) */}
+    <div id="girly-nearby-stops-view" className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
+      {/* Left Panel: Stops List */}
       <div
-        className={`w-full md:w-[450px] shrink-0 flex flex-col border-r z-10 shadow-[4px_0_12px_rgba(0,0,0,0.05)] transition-colors ${
-          isDark ? 'bg-[#1c1b1b] border-[#2e2e2e] text-[#e5e2e1]' : 'bg-[#efeded] border-[#becab6] text-[#1b1c1c]'
+        className={`w-full md:w-[450px] shrink-0 flex flex-col border-r z-10 shadow-lg transition-colors ${
+          isDark
+            ? 'bg-[#1e121f] border-[#381a34] text-pink-50'
+            : 'bg-[#fff5f8] border-pink-200 text-[#371329]'
         }`}
       >
         {/* List Header & Search */}
         <div
           className={`p-5 sticky top-0 z-20 flex flex-col gap-3.5 border-b shadow-sm ${
-            isDark ? 'bg-[#131313] border-[#2e2e2e]' : 'bg-white border-[#becab6]'
+            isDark ? 'bg-[#180e19] border-[#381a34]' : 'bg-white border-pink-200'
           }`}
         >
           <div className="flex items-center justify-between">
-            <h1 className="font-black text-2xl tracking-tight">Explore Stops</h1>
-            <span className="text-xs font-semibold text-gray-400">
-              {filteredStops.length} stops nearby
+            <h1 className="font-black text-2xl tracking-tight flex items-center gap-1.5">
+              <span>Explore Stops</span>
+              <span>🌸</span>
+            </h1>
+            <span className="text-xs font-bold text-pink-500">
+              {filteredStops.length} stops nearby ✨
             </span>
           </div>
 
           {/* Search Box */}
           <div className="relative group">
-            <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#37ab2e] text-[20px] transition-colors">
+            <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-pink-400 group-focus-within:text-pink-600 text-[20px] transition-colors">
               explore
             </span>
             <input
               type="text"
               value={stopSearch}
               onChange={(e) => setStopSearch(e.target.value)}
-              placeholder="Search by street or stop ID..."
-              className={`w-full text-sm py-2.5 pl-11 pr-3 rounded-xl transition-all focus:outline-none ${
+              placeholder="Search by stop name, street or ID... 💖"
+              className={`w-full text-xs sm:text-sm py-2.5 pl-11 pr-3 rounded-2xl transition-all focus:outline-none ${
                 isDark
-                  ? 'bg-[#201f1f] text-[#e5e2e1] placeholder-[#9ca3af] focus:ring-2 focus:ring-[#6cdf5c]'
-                  : 'bg-[#f5f3f3] text-[#1b1c1c] placeholder-[#3f4a3a] focus:ring-2 focus:ring-[#006e05] focus:bg-white'
+                  ? 'bg-[#281525] text-pink-100 placeholder-pink-400/50 border border-pink-900/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30'
+                  : 'bg-pink-50/60 text-[#371329] placeholder-pink-400 border border-pink-200 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-200'
               }`}
             />
             {stopSearch && (
               <button
                 onClick={() => setStopSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-200"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-pink-400 hover:text-pink-600"
               >
                 <span className="material-symbols-outlined text-[16px]">close</span>
               </button>
@@ -82,151 +91,128 @@ export const NearbyStopsView: React.FC<NearbyStopsViewProps> = ({
           </div>
 
           {/* Filters & Sort Controls */}
-          <div className="flex items-center justify-between text-xs text-gray-400 pt-1">
-            <div className="flex items-center gap-1.5 font-medium">
-              <span className="material-symbols-outlined text-[16px] text-[#37ab2e]">my_location</span>
-              <span>Downtown Core</span>
+          <div className="flex items-center justify-between text-xs text-pink-400 pt-1">
+            <div className="flex items-center gap-1.5 font-bold text-pink-500">
+              <span className="material-symbols-outlined text-[16px]">my_location</span>
+              <span>Central Sakura District</span>
             </div>
 
             <button
               onClick={() => setSortDistance(!sortDistance)}
-              className="flex items-center gap-1 font-bold text-[#37ab2e] hover:underline cursor-pointer"
+              className="flex items-center gap-1 font-extrabold text-rose-500 hover:underline cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px]">sort</span>
-              <span>Distance</span>
+              <span>Shortest Walk 👟</span>
             </button>
           </div>
 
-          {/* Transport Mode Pills */}
-          <div className="flex gap-2 pt-1 overflow-x-auto scrollbar-hide">
-            {(['all', 'bus', 'subway', 'ferry'] as const).map((mode) => (
+          {/* Transport Mode Filter Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar">
+            {(['all', 'bus', 'subway', 'train'] as const).map((mode) => (
               <button
                 key={mode}
                 onClick={() => setActiveFilter(mode)}
-                className={`px-3 py-1 rounded-full text-xs font-bold uppercase transition-all whitespace-nowrap ${
+                className={`px-3 py-1 rounded-full text-xs font-bold capitalize whitespace-nowrap transition-all border ${
                   activeFilter === mode
-                    ? 'bg-[#37ab2e] text-[#003701] shadow-sm'
+                    ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white border-pink-500 shadow-xs'
                     : isDark
-                    ? 'bg-[#2a2a2a] text-[#becab6] hover:bg-[#353534]'
-                    : 'bg-[#e4e2e2] text-[#3f4a3a] hover:bg-[#dbd9d9]'
+                    ? 'bg-[#251324] text-pink-200/80 border-[#381a34] hover:bg-[#341b31]'
+                    : 'bg-white text-[#501c3d] border-pink-200 hover:bg-pink-100/60'
                 }`}
               >
-                {mode === 'all' ? 'All Modes' : mode}
+                {mode === 'all'
+                  ? 'All 🌸'
+                  : mode === 'bus'
+                  ? 'Buses 🚌'
+                  : mode === 'subway'
+                  ? 'MRT / Subway 🚇'
+                  : 'Light Rail 🚊'}
               </button>
             ))}
           </div>
         </div>
 
         {/* Scrollable Stops List */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3.5 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-3.5">
           {filteredStops.map((stop) => {
             const isSelected = selectedStop?.id === stop.id;
             return (
               <div
                 key={stop.id}
                 onClick={() => onSelectStop(stop)}
-                className={`rounded-2xl p-4 shadow-sm relative overflow-hidden group cursor-pointer transition-all ${
+                className={`p-4 rounded-3xl border transition-all cursor-pointer ${
                   isSelected
                     ? isDark
-                      ? 'bg-[#242424] ring-2 ring-[#6cdf5c] shadow-lg'
-                      : 'bg-white ring-2 ring-[#006e05] shadow-md'
+                      ? 'bg-[#2f182c] border-pink-400 ring-2 ring-pink-500/40 shadow-lg'
+                      : 'bg-white border-pink-400 ring-2 ring-pink-300 shadow-md'
                     : isDark
-                    ? 'bg-[#1c1b1b] hover:bg-[#201f1f] hover:shadow-md'
-                    : 'bg-white hover:bg-[#fbf9f8] hover:shadow-md'
+                    ? 'bg-[#180e19] border-[#381a34] hover:bg-[#251424]'
+                    : 'bg-white border-pink-200 hover:bg-pink-50/50 shadow-xs'
                 }`}
               >
-                {/* Active Indicator Bar on Left */}
-                {isSelected && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#006e05]" />
-                )}
-
-                {/* Stop Header */}
-                <div className="flex justify-between items-start mb-3 pl-1">
+                <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h2 className="font-bold text-base text-inherit group-hover:text-[#37ab2e] transition-colors">
-                      {stop.name}
-                    </h2>
-                    <div className="flex items-center gap-2 text-gray-400 text-xs mt-1">
-                      <span className="flex items-center gap-0.5">
-                        <span className="material-symbols-outlined text-[14px]">directions_walk</span>
-                        {stop.walkTimeMins} min
-                      </span>
-                      <span className="w-1 h-1 rounded-full bg-gray-400" />
-                      <span>Stop ID: {stop.code}</span>
-                    </div>
+                    <h3 className="font-extrabold text-sm text-[#371329] dark:text-pink-50 flex items-center gap-1">
+                      <span>{stop.name}</span>
+                      <span className="text-xs">🌸</span>
+                    </h3>
+                    <p className="text-xs text-pink-500 font-semibold flex items-center gap-1 mt-0.5">
+                      <span className="material-symbols-outlined text-[13px]">directions_walk</span>
+                      <span>{stop.distanceDisplay}</span>
+                    </p>
                   </div>
 
-                  {/* Weather Micro-widget */}
-                  <div
-                    className={`flex flex-col items-end px-2 py-1 rounded-lg ${
-                      isDark ? 'bg-[#2a2a2a]' : 'bg-[#f5f3f3]'
-                    }`}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onViewSchedule(stop);
+                    }}
+                    className="text-xs font-black text-rose-500 hover:underline flex items-center gap-1"
                   >
-                    <span className="material-symbols-outlined text-[18px] text-[#37ab2e] mb-0.5">
-                      {stop.weatherIcon || 'partly_cloudy_day'}
-                    </span>
-                    <span className="text-xs font-bold">{stop.temp}</span>
-                  </div>
+                    <span>Timetable</span>
+                    <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                  </button>
                 </div>
 
-                {/* Routes At This Stop */}
+                {/* Routes Grid */}
                 <div className="space-y-2">
                   {stop.routes.map((route, rIdx) => (
                     <div
                       key={rIdx}
-                      className={`flex items-center justify-between p-2 rounded-xl transition-colors ${
-                        isDark ? 'bg-[#131313]' : 'bg-[#f5f3f3]'
+                      className={`flex items-center justify-between p-2.5 rounded-2xl ${
+                        isDark ? 'bg-[#261525]' : 'bg-[#fff5f8]'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div
-                          className={`w-11 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
+                          className={`w-9 h-6 rounded-full flex items-center justify-center font-black text-[11px] shrink-0 text-white shadow-xs ${
                             route.colorType === 'secondary'
-                              ? 'bg-[#1e88e5] text-white'
-                              : route.colorType === 'pink'
-                              ? 'bg-[#f85d9d] text-white'
+                              ? 'bg-gradient-to-tr from-purple-500 to-indigo-500'
                               : route.colorType === 'delayed'
-                              ? 'bg-[#ff9800] text-black font-extrabold'
-                              : route.colorType === 'critical'
-                              ? 'bg-[#d32f2f] text-white'
-                              : route.colorType === 'blue'
-                              ? 'bg-[#3394f1] text-white'
-                              : 'bg-[#006e05] text-white'
+                              ? 'bg-amber-500'
+                              : 'bg-gradient-to-tr from-pink-500 to-rose-500'
                           }`}
                         >
                           {route.routeNumber}
                         </div>
-                        <span className="text-xs font-semibold truncate text-inherit">{route.routeName}</span>
+                        <span className="text-xs font-semibold truncate text-[#371329] dark:text-pink-100">
+                          {route.routeName}
+                        </span>
                       </div>
 
-                      {/* Timers list: Primary (bold/pulsing) + Secondary small times */}
-                      {route.primaryTime === 'No Service' || route.status === 'critical' ? (
-                        <span className="text-[11px] font-bold text-[#d32f2f] bg-[#ffdad6]/60 dark:bg-[#93000a]/40 px-2 py-0.5 rounded-md">
-                          No Service
+                      <div className="text-right shrink-0 pl-2">
+                        <span
+                          className={`text-xs font-black ${
+                            route.status === 'arriving'
+                              ? 'text-pink-500 animate-pulse'
+                              : route.status === 'delayed'
+                              ? 'text-amber-500'
+                              : 'text-rose-500 dark:text-rose-400'
+                          }`}
+                        >
+                          {route.primaryTime}
                         </span>
-                      ) : (
-                        <div className="flex items-baseline gap-2 shrink-0">
-                          <span
-                            className={`font-timer-display text-base ${
-                              route.status === 'arriving'
-                                ? 'text-[#1e88e5] animate-pulse font-extrabold'
-                                : route.status === 'delayed'
-                                ? 'text-[#ff9800]'
-                                : route.status === 'on-time'
-                                ? 'text-[#37ab2e]'
-                                : 'text-inherit'
-                            }`}
-                          >
-                            {route.primaryTime}
-                          </span>
-                          {route.secondaryTimes &&
-                            route.secondaryTimes.map((sec, sIdx) => (
-                              <span key={sIdx} className="text-xs text-gray-400 pb-0.5">
-                                {sec}
-                              </span>
-                            ))}
-                        </div>
-                      )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -236,13 +222,13 @@ export const NearbyStopsView: React.FC<NearbyStopsViewProps> = ({
         </div>
       </div>
 
-      {/* Right Panel: Map Integration */}
-      <div className="flex-1 relative bg-surface-dim">
+      {/* Right Area: Interactive Map Canvas */}
+      <div className="flex-1 h-full hidden md:block">
         <InteractiveMap
           theme={theme}
           activeCity={activeCity}
           stops={stops}
-          selectedStop={selectedStop || stops[0]}
+          selectedStop={selectedStop}
           onSelectStop={onSelectStop}
           onViewSchedule={onViewSchedule}
         />

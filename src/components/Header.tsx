@@ -46,8 +46,8 @@ export const Header: React.FC<HeaderProps> = ({
       id="app-header"
       className={`fixed top-0 left-72 right-0 h-16 z-40 px-6 flex items-center justify-between border-b transition-colors duration-200 backdrop-blur-xl ${
         isDark
-          ? 'bg-[#131313]/85 border-[#2e2e2e] text-[#e5e2e1]'
-          : 'bg-[#fbf9f8]/90 border-[#becab6] text-[#1b1c1c] shadow-[0_1px_8px_rgba(0,0,0,0.04)]'
+          ? 'bg-[#181119]/85 border-[#2e1c2a] text-[#fce7f3]'
+          : 'bg-[#fff5f8]/90 border-[#fbcfe8] text-[#371329] shadow-[0_1px_12px_rgba(244,114,182,0.08)]'
       }`}
     >
       {/* Search Bar */}
@@ -55,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="relative flex items-center">
           <span
             className={`material-symbols-outlined absolute left-3.5 text-[20px] transition-colors ${
-              isDark ? 'text-[#9ca3af]' : 'text-[#3f4a3a]'
+              isDark ? 'text-pink-400' : 'text-pink-500'
             }`}
           >
             search
@@ -67,17 +67,17 @@ export const Header: React.FC<HeaderProps> = ({
             onChange={(e) => onSearchChange(e.target.value)}
             onFocus={() => setIsSearchFocused(true)}
             onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-            placeholder={isDark ? 'Search routes or stops...' : 'Search routes, stops, or addresses...'}
-            className={`w-full h-10 pl-11 pr-4 rounded-full text-sm font-normal transition-all focus:outline-none ${
+            placeholder="Search cute stops, MRT lines, cafes & routes... 🌸"
+            className={`w-full h-10 pl-11 pr-4 rounded-full text-xs sm:text-sm font-medium transition-all focus:outline-none ${
               isDark
-                ? 'bg-[#201f1f] text-[#e5e2e1] placeholder-[#9ca3af] border border-transparent focus:border-[#6cdf5c] focus:ring-1 focus:ring-[#6cdf5c]'
-                : 'bg-[#f5f3f3] text-[#1b1c1c] placeholder-[#3f4a3a] border border-transparent focus:bg-white focus:ring-2 focus:ring-[#88fc75]'
+                ? 'bg-[#261625] text-pink-100 placeholder-pink-400/50 border border-pink-900/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30'
+                : 'bg-white text-[#371329] placeholder-pink-400/70 border border-pink-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-300 shadow-sm'
             }`}
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-3 text-xs text-gray-400 hover:text-gray-200"
+              className="absolute right-3 text-xs text-pink-400 hover:text-pink-600"
             >
               <span className="material-symbols-outlined text-[16px]">close</span>
             </button>
@@ -87,12 +87,13 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Search Results Dropdown */}
         {isSearchFocused && filteredStops.length > 0 && (
           <div
-            className={`absolute top-12 left-0 right-0 rounded-2xl p-2 shadow-2xl z-50 border max-h-80 overflow-y-auto ${
-              isDark ? 'bg-[#1c1b1b] border-[#2e2e2e]' : 'bg-white border-[#becab6]'
+            className={`absolute top-12 left-0 right-0 rounded-2xl p-2.5 shadow-2xl z-50 border max-h-80 overflow-y-auto ${
+              isDark ? 'bg-[#20121e] border-[#381a34]' : 'bg-white border-pink-200'
             }`}
           >
-            <div className="text-[11px] font-semibold tracking-wider uppercase px-3 py-1 text-gray-400">
-              Matched Stops & Routes
+            <div className="text-[10px] font-bold tracking-wider uppercase px-3 py-1 text-pink-500 dark:text-pink-400 flex items-center gap-1">
+              <span>🌸</span>
+              <span>Matched Transit Stops</span>
             </div>
             {filteredStops.map((stop) => (
               <div
@@ -102,17 +103,17 @@ export const Header: React.FC<HeaderProps> = ({
                   onSearchChange('');
                 }}
                 className={`p-2.5 rounded-xl cursor-pointer flex items-center justify-between transition-colors ${
-                  isDark ? 'hover:bg-[#2a2a2a]' : 'hover:bg-[#f5f3f3]'
+                  isDark ? 'hover:bg-[#2e182b]' : 'hover:bg-pink-50'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isDark ? 'bg-[#353534]' : 'bg-[#e4e2e2]'}`}>
-                    <span className="material-symbols-outlined text-[18px] text-[#37ab2e]">location_on</span>
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isDark ? 'bg-pink-950/60 text-pink-300' : 'bg-pink-100 text-pink-600'}`}>
+                    <span className="material-symbols-outlined text-[18px]">location_on</span>
                   </div>
                   <div>
-                    <div className="font-semibold text-sm">{stop.name}</div>
-                    <div className="text-xs text-gray-400">
-                      Stop ID: {stop.code} • {stop.distanceDisplay}
+                    <div className="font-semibold text-xs text-[#371329] dark:text-pink-100">{stop.name}</div>
+                    <div className="text-[10px] text-pink-500/80 dark:text-pink-300/70">
+                      ID: {stop.code} • {stop.distanceDisplay}
                     </div>
                   </div>
                 </div>
@@ -120,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {stop.routes.slice(0, 2).map((r, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#37ab2e] text-white"
+                      className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-500 text-white shadow-xs"
                     >
                       {r.routeNumber}
                     </span>
@@ -133,95 +134,88 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Right Header Action Items */}
-      <div className="flex items-center gap-4 ml-6">
+      <div className="flex items-center gap-3 ml-6">
         {/* City Selector */}
         <div className="relative">
           <button
             id="city-selector-btn"
             onClick={() => setShowCityMenu(!showCityMenu)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border ${
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
               isDark
-                ? 'bg-[#201f1f] text-[#becab6] border-[#2e2e2e] hover:border-[#6cdf5c]'
-                : 'bg-[#f5f3f3] text-[#3f4a3a] border-[#becab6] hover:bg-[#eae8e7]'
+                ? 'bg-[#261625] text-pink-200 border-pink-900/40 hover:bg-[#341b31]'
+                : 'bg-white text-pink-950 border-pink-200 hover:bg-pink-50 shadow-sm'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px] text-[#37ab2e]">pin_drop</span>
-            <span className="truncate max-w-[120px]">{activeCity}</span>
-            <span className="material-symbols-outlined text-[14px]">expand_more</span>
+            <span className="text-sm">🌸</span>
+            <span className="max-w-[110px] truncate">{activeCity}</span>
+            <span className="material-symbols-outlined text-[16px] text-pink-400">expand_more</span>
           </button>
 
           {showCityMenu && (
             <div
-              className={`absolute right-0 top-10 w-48 rounded-xl p-1.5 shadow-xl z-50 border ${
-                isDark ? 'bg-[#1c1b1b] border-[#2e2e2e]' : 'bg-white border-[#becab6]'
+              className={`absolute right-0 top-10 w-48 rounded-2xl p-1.5 shadow-2xl z-50 border ${
+                isDark ? 'bg-[#20121e] border-[#381a34] text-pink-100' : 'bg-white border-pink-200 text-[#371329]'
               }`}
             >
-              {cities.map((city) => (
+              <div className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 text-pink-500">
+                Choose City Hub
+              </div>
+              {cities.map((c) => (
                 <button
-                  key={city}
+                  key={c}
                   onClick={() => {
-                    onChangeCity(city);
+                    onChangeCity(c);
                     setShowCityMenu(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-between ${
-                    activeCity === city
-                      ? 'bg-[#37ab2e]/15 text-[#37ab2e] font-bold'
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between ${
+                    activeCity === c
+                      ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold'
                       : isDark
-                      ? 'text-[#e5e2e1] hover:bg-[#2a2a2a]'
-                      : 'text-[#1b1c1c] hover:bg-[#f5f3f3]'
+                      ? 'hover:bg-[#2e182b]'
+                      : 'hover:bg-pink-50 text-[#371329]'
                   }`}
                 >
-                  <span>{city}</span>
-                  {activeCity === city && (
-                    <span className="material-symbols-outlined text-[16px] text-[#37ab2e]">check</span>
-                  )}
+                  <span>{c}</span>
+                  {activeCity === c && <span className="text-xs">✨</span>}
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        {/* Theme Toggle (Light / Dark Mode Switcher) */}
+        {/* Notifications Icon Pill */}
         <button
-          id="theme-toggle-btn"
-          onClick={onToggleTheme}
-          title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
-          className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-            isDark
-              ? 'bg-[#201f1f] text-[#6cdf5c] hover:bg-[#2a2a2a] border border-[#2e2e2e]'
-              : 'bg-[#f5f3f3] text-[#006e05] hover:bg-[#eae8e7] border border-[#becab6]'
-          }`}
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            {isDark ? 'light_mode' : 'dark_mode'}
-          </span>
-        </button>
-
-        {/* Notifications Icon with Badge */}
-        <button
-          id="header-notifications-btn"
+          id="header-notification-btn"
           onClick={onOpenNotifications}
-          className={`relative p-2 rounded-full transition-colors ${
+          className={`relative w-9 h-9 rounded-full flex items-center justify-center border transition-all ${
             isDark
-              ? 'text-[#becab6] hover:text-[#6cdf5c] hover:bg-[#201f1f]'
-              : 'text-[#3f4a3a] hover:text-[#006e05] hover:bg-[#f5f3f3]'
+              ? 'bg-[#261625] text-pink-200 border-pink-900/40 hover:bg-[#341b31]'
+              : 'bg-white text-pink-600 border-pink-200 hover:bg-pink-50 shadow-sm'
           }`}
-          title="Alerts & Notifications"
+          title="Notifications & Alerts"
         >
-          <span className="material-symbols-outlined text-[20px]">notifications</span>
+          <span className="material-symbols-outlined text-[19px]">notifications</span>
           {unreadCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#ba1a1a] rounded-full ring-2 ring-transparent"></span>
+            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center ring-2 ring-white dark:ring-[#181119]">
+              {unreadCount}
+            </span>
           )}
         </button>
 
-        {/* User Profile Avatar */}
-        <div
-          id="user-profile-avatar"
-          className="w-8 h-8 rounded-full bg-[#006e05] flex items-center justify-center text-white cursor-pointer shadow-sm hover:scale-105 transition-transform"
-          title="Account Profile"
+        {/* Theme Mode Toggle (Cute Pink Sun / Sparkle Moon) */}
+        <button
+          id="theme-toggle-btn"
+          onClick={onToggleTheme}
+          className={`px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border transition-all ${
+            isDark
+              ? 'bg-gradient-to-r from-pink-950 to-purple-950 text-pink-200 border-pink-800 hover:border-pink-600'
+              : 'bg-gradient-to-r from-pink-50 to-rose-100 text-pink-700 border-pink-200 hover:border-pink-300 shadow-sm'
+          }`}
+          title={`Switch to ${isDark ? 'Light Blossom' : 'Velvet Night'} mode`}
         >
-          <span className="material-symbols-outlined text-[18px]">person</span>
-        </div>
+          <span>{isDark ? '🌙' : '🌸'}</span>
+          <span className="hidden sm:inline font-semibold">{isDark ? 'Velvet' : 'Blossom'}</span>
+        </button>
       </div>
     </header>
   );
