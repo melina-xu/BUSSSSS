@@ -17,88 +17,91 @@ export const AlternativesModal: React.FC<AlternativesModalProps> = ({
 
   const defaultAlternatives = [
     {
-      name: 'Direct Shuttle 99X (Sakura Express)',
-      description: 'Bypasses the affected corridor via Boulevard Expressway.',
-      estTime: '18 min'
+      name: 'Corridor 99X (Autonomous Flyover Bypass)',
+      description: 'Pre-cleared high-speed arterial bypass eliminating signal friction.',
+      estTime: '14 min (+5.2m Alpha)',
+      confidence: '99.9%'
     },
     {
-      name: 'MRT Downtown Loop Line',
-      description: 'Fast, smooth rail bypass with direct transfers.',
-      estTime: '22 min'
+      name: 'Subterranean Downtown HSR Loop',
+      description: 'CBTC automated magnetic rail with zero street-level congestion.',
+      estTime: '17 min (+3.8m Alpha)',
+      confidence: '99.5%'
     },
     {
-      name: 'Shared Candy EV Shuttle',
-      description: 'On-demand micro-transit running every 4 minutes.',
-      estTime: '15 min'
+      name: 'Executive Autonomous Pod Cluster',
+      description: 'On-demand synchronized micro-fleet operating at 60 km/h.',
+      estTime: '12 min (+7.1m Alpha)',
+      confidence: '99.1%'
     }
   ];
 
   return (
     <div
-      id="girly-alternatives-modal"
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+      id="aether-quant-alternatives-modal"
+      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 font-mono"
     >
       <div
-        className={`max-w-xl w-full rounded-3xl shadow-2xl border overflow-hidden transition-all ${
-          isDark ? 'bg-[#20121e] border-[#381a34] text-pink-50' : 'bg-white border-pink-200 text-[#371329]'
+        className={`max-w-xl w-full rounded-2xl shadow-2xl border overflow-hidden transition-all ${
+          isDark ? 'bg-[#090d16] border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
         }`}
       >
         {/* Header */}
         <div
-          className={`p-5 border-b flex items-center justify-between ${
-            isDark ? 'bg-[#281525] border-[#381a34]' : 'bg-[#fff5f8] border-pink-200'
+          className={`p-4 border-b flex items-center justify-between ${
+            isDark ? 'bg-[#0d121f] border-slate-800' : 'bg-slate-100 border-slate-300'
           }`}
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shadow-md shadow-pink-500/25">
-              <span className="material-symbols-outlined text-[22px]">alt_route</span>
+            <div className="w-8 h-8 rounded-lg bg-cyan-500 text-slate-950 flex items-center justify-center font-black">
+              <span className="material-symbols-outlined text-[20px]">alt_route</span>
             </div>
             <div>
-              <h2 className="font-black text-lg flex items-center gap-1.5">
-                <span>{alert.title}</span>
-                <span className="text-xs">🌸</span>
+              <h2 className="font-extrabold text-sm text-white dark:text-white font-sans">
+                {alert.title}
               </h2>
-              <p className="text-xs text-pink-400 font-medium">Advisory Details & Sweet Alternates ✨</p>
+              <p className="text-[10px] text-slate-400">Algorithmic Arbitrage Vectors & Bypass Telemetry</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-pink-400 hover:text-pink-600 hover:bg-pink-100 dark:hover:bg-pink-900/40"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-200 hover:bg-slate-800"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <span className="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-5 space-y-4 max-h-[65vh] overflow-y-auto custom-scrollbar">
-          <div className="p-3.5 rounded-2xl bg-pink-100/50 dark:bg-pink-950/40 border border-pink-200 dark:border-pink-900/40 text-xs font-semibold leading-relaxed text-pink-700 dark:text-pink-300">
+        <div className="p-4 space-y-3.5 max-h-[65vh] overflow-y-auto custom-scrollbar">
+          <div className="p-3 rounded-xl bg-[#06080d] border border-slate-800 text-xs leading-relaxed text-slate-300 font-sans">
             {alert.summary}
           </div>
 
           <div>
-            <h4 className="text-[11px] font-black uppercase tracking-wider text-pink-500 mb-2.5 flex items-center gap-1">
-              <span>🌸</span> Recommended Alternative Routes
+            <h4 className="text-[10px] font-extrabold uppercase text-cyan-400 mb-2 flex items-center gap-1">
+              <span>PRE-COMPUTED ARBITRAGE BYPASSES</span>
             </h4>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {defaultAlternatives.map((alt, idx) => (
                 <div
                   key={idx}
-                  className={`p-3.5 rounded-2xl border flex items-center justify-between ${
-                    isDark ? 'bg-[#281525] border-[#381a34]' : 'bg-[#fff5f8] border-pink-100'
+                  className={`p-3 rounded-xl border flex items-center justify-between ${
+                    isDark ? 'bg-[#0b0f19] border-slate-800' : 'bg-slate-50 border-slate-200'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">🌸</span>
+                  <div className="flex items-center gap-2.5">
+                    <span className="material-symbols-outlined text-cyan-400 text-[18px]">bolt</span>
                     <div>
-                      <div className="font-bold text-xs text-[#371329] dark:text-pink-100">{alt.name}</div>
-                      <div className="text-[11px] text-pink-500">{alt.description}</div>
+                      <div className="font-bold text-xs text-slate-200 font-sans">{alt.name}</div>
+                      <div className="text-[10px] text-slate-400">{alt.description}</div>
                     </div>
                   </div>
 
-                  <div className="text-right">
-                    <span className="text-xs font-black text-rose-500">{alt.estTime}</span>
+                  <div className="text-right shrink-0 pl-2">
+                    <span className="text-xs font-black text-emerald-400 block">{alt.estTime}</span>
+                    <span className="text-[9px] text-slate-500">{alt.confidence} Conf</span>
                   </div>
                 </div>
               ))}
@@ -108,16 +111,16 @@ export const AlternativesModal: React.FC<AlternativesModalProps> = ({
           {/* Skipped Stops if any */}
           {alert.skippedStops && alert.skippedStops.length > 0 && (
             <div className="pt-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-rose-500 block mb-1">
-                Temporarily Skipped Stops:
+              <span className="text-[9px] font-black uppercase text-amber-400 block mb-1">
+                EXCLUDED FRICTION NODES:
               </span>
               <div className="flex items-center gap-1.5 flex-wrap">
                 {alert.skippedStops.map((stopCode, sIdx) => (
                   <span
                     key={sIdx}
-                    className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
+                    className="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40"
                   >
-                    Stop #{stopCode}
+                    Node #{stopCode}
                   </span>
                 ))}
               </div>
@@ -127,15 +130,15 @@ export const AlternativesModal: React.FC<AlternativesModalProps> = ({
 
         {/* Footer */}
         <div
-          className={`p-4 border-t flex justify-end ${
-            isDark ? 'bg-[#180e19] border-[#381a34]' : 'bg-[#fff0f5] border-pink-200'
+          className={`p-3.5 border-t flex justify-end ${
+            isDark ? 'bg-[#0d121f] border-slate-800' : 'bg-slate-100 border-slate-300'
           }`}
         >
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-sm"
+            className="px-4 py-1.5 rounded-lg text-xs font-black bg-cyan-600 hover:bg-cyan-500 text-slate-950 shadow-xs"
           >
-            Got it 💖
+            EXECUTE ARBITRAGE BYPASS
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeMode, TravelMode, LocationItem, RouteOption, NavigationStep } from '../types';
+import { ThemeMode, TravelMode, LocationItem, RouteOption } from '../types';
 import { POPULAR_LOCATIONS, getRoutePlans } from '../data/mockData';
 
 interface RoutePlannerProps {
@@ -99,106 +99,108 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
 
   return (
     <div
-      id="girly-route-planner"
-      className={`rounded-3xl shadow-2xl border transition-all duration-300 backdrop-blur-xl flex flex-col z-30 overflow-hidden ${
+      id="aether-quant-route-planner"
+      className={`rounded-2xl shadow-2xl border transition-all duration-300 backdrop-blur-xl flex flex-col z-30 overflow-hidden font-sans ${
         isDark
-          ? 'bg-[#1e131f]/95 border-[#381a34] text-pink-50'
-          : 'bg-white/95 border-pink-200 text-[#371329]'
+          ? 'bg-[#090d16]/95 border-slate-800 text-slate-100'
+          : 'bg-white/95 border-slate-300 text-slate-900'
       } ${isCollapsed ? 'w-80 md:w-96' : 'w-full md:w-[420px]'} ${className}`}
     >
       {/* Top Header & Mode Selector */}
       <div
         className={`p-4 border-b flex flex-col gap-3 ${
-          isDark ? 'bg-[#251527] border-[#381a34]' : 'bg-[#fff5f8] border-pink-200'
+          isDark ? 'bg-[#0d121f] border-slate-800' : 'bg-slate-50 border-slate-200'
         }`}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shadow-md shadow-pink-500/25">
+            <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center shadow-md shadow-cyan-500/20">
               <span className="material-symbols-outlined text-[19px]">alt_route</span>
             </div>
             <div>
-              <span className="font-extrabold text-sm tracking-tight flex items-center gap-1">
-                <span>Trip & Route Planner</span>
-                <span className="text-xs">🌸</span>
+              <span className="font-extrabold text-xs font-mono tracking-tight text-white dark:text-white flex items-center gap-1.5">
+                <span>NEURAL ROUTE ARBITRAGE</span>
+                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                  AI v4.8
+                </span>
               </span>
-              <p className="text-[10px] text-pink-500 font-medium">Smart multi-modal directions</p>
+              <p className="text-[10px] font-mono text-slate-400">High-speed latency optimization</p>
             </div>
           </div>
 
           <div className="flex items-center gap-1">
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                isDark ? 'hover:bg-[#381a34] text-pink-300' : 'hover:bg-pink-100 text-pink-700'
+              className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
+                isDark ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-200 text-slate-600'
               }`}
-              title={isCollapsed ? 'Expand panel' : 'Collapse panel'}
+              title={isCollapsed ? 'Expand cockpit' : 'Collapse cockpit'}
             >
-              <span className="material-symbols-outlined text-[20px]">
+              <span className="material-symbols-outlined text-[18px]">
                 {isCollapsed ? 'expand_more' : 'expand_less'}
               </span>
             </button>
           </div>
         </div>
 
-        {/* Travel Mode Switcher Tabs (Transit / Car / Walk) */}
+        {/* Travel Mode Switcher Tabs */}
         <div
-          className={`grid grid-cols-3 p-1 rounded-2xl border ${
-            isDark ? 'bg-[#180e19] border-[#381a34]' : 'bg-pink-100/60 border-pink-200'
+          className={`grid grid-cols-3 p-1 rounded-xl border ${
+            isDark ? 'bg-[#06080d] border-slate-800' : 'bg-slate-200/70 border-slate-300'
           }`}
         >
           <button
             onClick={() => onTravelModeChange('transit')}
-            className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-1.5 px-2 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               travelMode === 'transit'
-                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/30'
+                ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
                 : isDark
-                ? 'text-pink-300 hover:text-white'
-                : 'text-[#63214c] hover:text-pink-700'
+                ? 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-700 hover:text-slate-900'
             }`}
           >
-            <span className="material-symbols-outlined text-[17px]">directions_transit</span>
-            <span>Transit 🌸</span>
+            <span className="material-symbols-outlined text-[16px]">train</span>
+            <span>HSR / Metro</span>
           </button>
 
           <button
             onClick={() => onTravelModeChange('car')}
-            className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-1.5 px-2 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               travelMode === 'car'
-                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/30'
+                ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
                 : isDark
-                ? 'text-pink-300 hover:text-white'
-                : 'text-[#63214c] hover:text-pink-700'
+                ? 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-700 hover:text-slate-900'
             }`}
           >
-            <span className="material-symbols-outlined text-[17px]">directions_car</span>
-            <span>Drive 🚗</span>
+            <span className="material-symbols-outlined text-[16px]">local_taxi</span>
+            <span>Autonomous</span>
           </button>
 
           <button
             onClick={() => onTravelModeChange('walk')}
-            className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-1.5 px-2 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all ${
               travelMode === 'walk'
-                ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/30'
+                ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
                 : isDark
-                ? 'text-pink-300 hover:text-white'
-                : 'text-[#63214c] hover:text-pink-700'
+                ? 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-700 hover:text-slate-900'
             }`}
           >
-            <span className="material-symbols-outlined text-[17px]">directions_walk</span>
-            <span>Walk 👟</span>
+            <span className="material-symbols-outlined text-[16px]">directions_walk</span>
+            <span>Skybridge</span>
           </button>
         </div>
 
         {/* Input Fields for Starting Point & Destination */}
-        <div className="relative flex items-center gap-2">
-          {/* Visual Track Line between Origin & Destination */}
+        <div className="relative flex items-center gap-2 font-mono">
+          {/* Visual Track Line */}
           <div className="flex flex-col items-center ml-1 shrink-0">
-            <div className="w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-[10px] font-black shadow-sm ring-2 ring-pink-200 dark:ring-pink-900">
+            <div className="w-5 h-5 rounded bg-cyan-500 text-slate-950 flex items-center justify-center text-[10px] font-black shadow-xs">
               A
             </div>
-            <div className="w-0.5 h-6 bg-gradient-to-b from-rose-400 to-pink-400 my-0.5 stroke-dashed"></div>
-            <div className="w-6 h-6 rounded-full bg-pink-600 text-white flex items-center justify-center text-[10px] font-black shadow-sm ring-2 ring-pink-200 dark:ring-pink-900">
+            <div className="w-0.5 h-6 bg-slate-700 my-0.5"></div>
+            <div className="w-5 h-5 rounded bg-amber-400 text-slate-950 flex items-center justify-center text-[10px] font-black shadow-xs">
               B
             </div>
           </div>
@@ -215,11 +217,11 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                   setShowOriginDropdown(true);
                 }}
                 onFocus={() => setShowOriginDropdown(true)}
-                placeholder="Choose starting point 🍓"
-                className={`w-full py-2 pl-3 pr-8 rounded-xl text-xs font-semibold focus:outline-none transition-all ${
+                placeholder="Origin Node or GPS Coordinates..."
+                className={`w-full py-1.5 pl-3 pr-7 rounded-lg text-xs font-mono font-semibold focus:outline-none transition-all ${
                   isDark
-                    ? 'bg-[#180e19] text-pink-100 placeholder-pink-400/50 border border-[#381a34] focus:border-pink-500'
-                    : 'bg-white text-[#371329] placeholder-pink-400 border border-pink-200 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 shadow-xs'
+                    ? 'bg-[#06080d] text-slate-100 placeholder-slate-500 border border-slate-700 focus:border-cyan-500'
+                    : 'bg-white text-slate-900 placeholder-slate-400 border border-slate-300 focus:border-cyan-600 shadow-xs'
                 }`}
               />
               {originText && (
@@ -228,35 +230,35 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                     setOriginText('');
                     setShowOriginDropdown(true);
                   }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-pink-400 hover:text-pink-600"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                 >
-                  <span className="material-symbols-outlined text-[15px]">close</span>
+                  <span className="material-symbols-outlined text-[14px]">close</span>
                 </button>
               )}
 
-              {/* Origin Autocomplete Suggestions */}
+              {/* Origin Autocomplete */}
               {showOriginDropdown && filteredOriginOptions.length > 0 && (
                 <div
-                  className={`absolute left-0 right-0 top-10 rounded-2xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
-                    isDark ? 'bg-[#20121e] border-[#381a34]' : 'bg-white border-pink-200'
+                  className={`absolute left-0 right-0 top-9 rounded-xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
+                    isDark ? 'bg-[#0d121f] border-slate-700' : 'bg-white border-slate-300'
                   }`}
                 >
-                  <div className="text-[10px] font-bold text-pink-500 px-3 py-1 uppercase tracking-wider flex items-center gap-1">
-                    <span>🍓</span> Choose Origin
+                  <div className="text-[9px] font-bold text-slate-400 px-2.5 py-1 uppercase tracking-wider">
+                    Matched Origin Corridors
                   </div>
                   {filteredOriginOptions.map((loc) => (
                     <div
                       key={loc.id}
                       onMouseDown={() => handleSelectOrigin(loc)}
-                      className={`p-2 rounded-xl cursor-pointer flex items-center justify-between text-xs transition-colors ${
-                        isDark ? 'hover:bg-[#2f182c]' : 'hover:bg-pink-50'
+                      className={`p-2 rounded-lg cursor-pointer flex items-center justify-between text-xs transition-colors ${
+                        isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="text-sm">🌸</span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="material-symbols-outlined text-[16px] text-cyan-400">fidget_spinner</span>
                         <div className="truncate">
-                          <div className="font-bold text-[#371329] dark:text-pink-100">{loc.name}</div>
-                          <div className="text-[10px] text-pink-500/70 truncate">{loc.address}</div>
+                          <div className="font-bold text-slate-200">{loc.name}</div>
+                          <div className="text-[10px] text-slate-500 truncate">{loc.address}</div>
                         </div>
                       </div>
                     </div>
@@ -275,11 +277,11 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                   setShowDestDropdown(true);
                 }}
                 onFocus={() => setShowDestDropdown(true)}
-                placeholder="Choose cute destination 💖"
-                className={`w-full py-2 pl-3 pr-8 rounded-xl text-xs font-semibold focus:outline-none transition-all ${
+                placeholder="Target Destination Hub..."
+                className={`w-full py-1.5 pl-3 pr-7 rounded-lg text-xs font-mono font-semibold focus:outline-none transition-all ${
                   isDark
-                    ? 'bg-[#180e19] text-pink-100 placeholder-pink-400/50 border border-[#381a34] focus:border-pink-500'
-                    : 'bg-white text-[#371329] placeholder-pink-400 border border-pink-200 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 shadow-xs'
+                    ? 'bg-[#06080d] text-slate-100 placeholder-slate-500 border border-slate-700 focus:border-cyan-500'
+                    : 'bg-white text-slate-900 placeholder-slate-400 border border-slate-300 focus:border-cyan-600 shadow-xs'
                 }`}
               />
               {destText && (
@@ -288,35 +290,35 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                     setDestText('');
                     setShowDestDropdown(true);
                   }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-pink-400 hover:text-pink-600"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                 >
-                  <span className="material-symbols-outlined text-[15px]">close</span>
+                  <span className="material-symbols-outlined text-[14px]">close</span>
                 </button>
               )}
 
-              {/* Destination Autocomplete Suggestions */}
+              {/* Destination Autocomplete */}
               {showDestDropdown && filteredDestOptions.length > 0 && (
                 <div
-                  className={`absolute left-0 right-0 top-10 rounded-2xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
-                    isDark ? 'bg-[#20121e] border-[#381a34]' : 'bg-white border-pink-200'
+                  className={`absolute left-0 right-0 top-9 rounded-xl p-1.5 shadow-2xl z-50 border max-h-56 overflow-y-auto ${
+                    isDark ? 'bg-[#0d121f] border-slate-700' : 'bg-white border-slate-300'
                   }`}
                 >
-                  <div className="text-[10px] font-bold text-pink-500 px-3 py-1 uppercase tracking-wider flex items-center gap-1">
-                    <span>💖</span> Choose Destination
+                  <div className="text-[9px] font-bold text-slate-400 px-2.5 py-1 uppercase tracking-wider">
+                    Matched Destination Targets
                   </div>
                   {filteredDestOptions.map((loc) => (
                     <div
                       key={loc.id}
                       onMouseDown={() => handleSelectDestination(loc)}
-                      className={`p-2 rounded-xl cursor-pointer flex items-center justify-between text-xs transition-colors ${
-                        isDark ? 'hover:bg-[#2f182c]' : 'hover:bg-pink-50'
+                      className={`p-2 rounded-lg cursor-pointer flex items-center justify-between text-xs transition-colors ${
+                        isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="text-sm">✨</span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="material-symbols-outlined text-[16px] text-amber-400">corporate_fare</span>
                         <div className="truncate">
-                          <div className="font-bold text-[#371329] dark:text-pink-100">{loc.name}</div>
-                          <div className="text-[10px] text-pink-500/70 truncate">{loc.address}</div>
+                          <div className="font-bold text-slate-200">{loc.name}</div>
+                          <div className="text-[10px] text-slate-500 truncate">{loc.address}</div>
                         </div>
                       </div>
                     </div>
@@ -326,52 +328,51 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
             </div>
           </div>
 
-          {/* Swap Origin / Destination Button */}
+          {/* Swap Button */}
           <button
             onClick={handleSwap}
-            className={`w-8 h-8 rounded-full border shadow-sm flex items-center justify-center shrink-0 transition-transform active:rotate-180 ${
+            className={`w-7 h-7 rounded-lg border shadow-xs flex items-center justify-center shrink-0 transition-transform active:rotate-180 ${
               isDark
-                ? 'bg-[#251527] text-pink-300 border-[#381a34] hover:bg-[#381a34]'
-                : 'bg-white text-pink-600 border-pink-200 hover:bg-pink-50'
+                ? 'bg-[#0d121f] text-cyan-400 border-slate-700 hover:bg-slate-800'
+                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
             }`}
-            title="Swap Origin & Destination"
+            title="Invert Origin & Destination Vectors"
           >
-            <span className="material-symbols-outlined text-[18px]">swap_vert</span>
+            <span className="material-symbols-outlined text-[16px]">swap_vert</span>
           </button>
         </div>
 
-        {/* Quick Landmark Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-0.5 pt-0.5">
+        {/* Quick Hub Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-0.5 pt-0.5 font-mono">
           {POPULAR_LOCATIONS.slice(1, 5).map((loc) => (
             <button
               key={loc.id}
               onClick={() => handleSelectDestination(loc)}
-              className={`px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap border transition-all ${
+              className={`px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap border transition-all ${
                 destination.id === loc.id
-                  ? 'bg-pink-500 text-white border-pink-500 shadow-xs'
+                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-xs'
                   : isDark
-                  ? 'bg-[#180e19] text-pink-200/80 border-[#381a34] hover:border-pink-500'
-                  : 'bg-white text-pink-800 border-pink-200 hover:bg-pink-50'
+                  ? 'bg-[#06080d] text-slate-400 border-slate-800 hover:border-slate-600'
+                  : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
               }`}
             >
-              🌸 {loc.name.split(' ')[0]}
+              [{loc.quantCode || 'NODE'}]
             </button>
           ))}
         </div>
       </div>
 
-      {/* Main Content Area: Routes List & Step Details */}
+      {/* Main Content: Route Options & Quantitative Step Guidance */}
       {!isCollapsed && (
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-3.5 space-y-3 max-h-[calc(100vh-320px)]">
-          {/* Route Options Header */}
-          <div className="flex items-center justify-between px-1">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-pink-500 flex items-center gap-1">
-              <span>✨</span>
-              <span>Recommended Routes ({availableRoutes.length})</span>
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3 max-h-[calc(100vh-320px)]">
+          {/* Header */}
+          <div className="flex items-center justify-between px-1 font-mono">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+              <span>ALPHA CORRIDOR OPTIONS ({availableRoutes.length})</span>
             </span>
             {selectedRoute && (
-              <span className="text-[11px] font-bold text-pink-500/80">
-                {selectedRoute.distanceKm} km
+              <span className="text-[10px] font-bold text-slate-400">
+                {selectedRoute.distanceKm} km • {selectedRoute.neuralConfidence}% CONF
               </span>
             )}
           </div>
@@ -384,77 +385,74 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                 <div
                   key={route.id}
                   onClick={() => onSelectRoute(route)}
-                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
+                  className={`p-3.5 rounded-xl border transition-all cursor-pointer relative overflow-hidden font-mono ${
                     isSelected
                       ? isDark
-                        ? 'bg-[#2a172a] border-pink-500 ring-2 ring-pink-500/40 shadow-lg'
-                        : 'bg-[#fff5f8] border-pink-400 ring-2 ring-pink-300 shadow-md'
+                        ? 'bg-cyan-950/30 border-cyan-500 ring-1 ring-cyan-500/50 shadow-lg'
+                        : 'bg-cyan-50 border-cyan-600 ring-1 ring-cyan-600 shadow-md'
                       : isDark
-                      ? 'bg-[#180e19] border-[#381a34] hover:bg-[#241323]'
-                      : 'bg-white border-pink-200/80 hover:bg-pink-50/50'
+                      ? 'bg-[#0b0f19] border-slate-800 hover:border-slate-700'
+                      : 'bg-white border-slate-300 hover:bg-slate-50'
                   }`}
                 >
                   {/* Recommended Badge */}
                   {route.isRecommended && (
-                    <div className="absolute top-0 right-0 bg-gradient-to-l from-rose-500 to-pink-500 text-white text-[9px] font-black uppercase px-2.5 py-0.5 rounded-bl-xl shadow-xs">
-                      💖 Sweetest Route
+                    <div className="absolute top-0 right-0 bg-cyan-500 text-slate-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-bl-lg font-mono">
+                      ALPHA LEAD
                     </div>
                   )}
 
-                  {/* Duration, Title & Arrival Time */}
-                  <div className="flex items-start justify-between mb-2">
+                  {/* Duration & Delta */}
+                  <div className="flex items-start justify-between mb-1.5">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xl font-black text-[#371329] dark:text-pink-100">
+                        <span className="text-lg font-black text-white dark:text-white">
                           {route.durationMinutes} min
                         </span>
-                        {route.isFastest && (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300 border border-pink-300/60">
-                            ✨ Fastest
+                        {route.alphaTimeSavedMin ? (
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            +{route.alphaTimeSavedMin}m Alpha
                           </span>
-                        )}
+                        ) : null}
                       </div>
-                      <div className="text-[11px] text-pink-500 font-medium">
-                        {route.departureTime} – {route.arrivalTime}
+                      <div className="text-[10px] text-slate-400">
+                        {route.departureTime} → {route.arrivalTime}
                       </div>
                     </div>
 
                     <div className="text-right">
                       {route.cost && (
-                        <div className="text-xs font-black text-rose-500 dark:text-rose-400">
+                        <div className="text-xs font-black text-amber-400 font-mono">
                           {route.cost}
                         </div>
                       )}
-                      {route.carbonSavedKg && (
-                        <div className="text-[10px] font-bold text-pink-600 dark:text-pink-300 flex items-center justify-end gap-0.5">
-                          <span>🌸</span>
-                          <span>-{route.carbonSavedKg} kg CO₂</span>
-                        </div>
-                      )}
+                      <div className="text-[9px] text-slate-400">
+                        Vol: <span className="text-emerald-400 font-bold">{route.volatilityRating || 'LOW'}</span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Summary / Via Description */}
-                  <p className="text-xs text-[#501c3d] dark:text-pink-200/80 font-medium mb-2.5">
+                  {/* Summary Title */}
+                  <p className="text-xs text-slate-300 font-sans font-medium mb-2">
                     {route.title}
                   </p>
 
-                  {/* Transit Pill Badges */}
+                  {/* Transit Badges */}
                   {route.transitBadges && (
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {route.transitBadges.map((badge, bIdx) => (
                         <React.Fragment key={bIdx}>
                           <span
-                            className="px-2.5 py-0.5 rounded-full text-[10px] font-black shadow-xs"
+                            className="px-2 py-0.5 rounded text-[9px] font-mono font-bold"
                             style={{
-                              backgroundColor: badge.type === 'walk' ? '#fce7f3' : badge.bg,
-                              color: badge.type === 'walk' ? '#be185d' : badge.color
+                              backgroundColor: badge.bg,
+                              color: badge.color
                             }}
                           >
                             {badge.label}
                           </span>
                           {bIdx < route.transitBadges.length - 1 && (
-                            <span className="text-[10px] text-pink-300">›</span>
+                            <span className="text-[10px] text-slate-600">›</span>
                           )}
                         </React.Fragment>
                       ))}
@@ -465,54 +463,44 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
             })}
           </div>
 
-          {/* Selected Route Turn-by-Turn Guidance Accordion */}
+          {/* Turn-by-Turn Steps */}
           {selectedRoute && (
             <div
-              className={`rounded-2xl p-3.5 border transition-all ${
-                isDark ? 'bg-[#180e19] border-[#381a34]' : 'bg-[#fff5f8]/70 border-pink-200'
+              className={`rounded-xl p-3 border transition-all ${
+                isDark ? 'bg-[#06080d] border-slate-800' : 'bg-slate-50 border-slate-300'
               }`}
             >
               <div
                 onClick={() => setShowStepDetails(!showStepDetails)}
-                className="flex items-center justify-between cursor-pointer"
+                className="flex items-center justify-between cursor-pointer font-mono"
               >
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-pink-500 text-[18px]">
-                    list_alt
+                  <span className="material-symbols-outlined text-cyan-400 text-[16px]">
+                    alt_route
                   </span>
-                  <span className="font-extrabold text-xs text-[#371329] dark:text-pink-100">
-                    Turn-by-Turn Steps ({selectedRoute.steps.length})
+                  <span className="font-extrabold text-[11px] text-slate-200 uppercase">
+                    Vector Steps Telemetry ({selectedRoute.steps.length})
                   </span>
                 </div>
-                <span className="material-symbols-outlined text-[18px] text-pink-400">
+                <span className="material-symbols-outlined text-[16px] text-slate-400">
                   {showStepDetails ? 'expand_less' : 'expand_more'}
                 </span>
               </div>
 
               {showStepDetails && (
-                <div className="mt-3.5 space-y-3 pl-1">
+                <div className="mt-3 space-y-2.5 pl-1 font-mono">
                   {selectedRoute.steps.map((step, idx) => {
                     const isExpanded = expandedStepId === step.id;
                     return (
-                      <div key={step.id} className="relative pl-6">
-                        {/* Vertical timeline connector line */}
+                      <div key={step.id} className="relative pl-5">
+                        {/* Timeline connector */}
                         {idx < selectedRoute.steps.length - 1 && (
-                          <div className="absolute left-[9px] top-6 bottom-0 w-0.5 bg-pink-200 dark:bg-pink-900/60" />
+                          <div className="absolute left-[7px] top-5 bottom-0 w-0.5 bg-slate-800" />
                         )}
 
-                        {/* Step Icon Pin */}
-                        <div
-                          className={`absolute left-0 top-0.5 w-5 h-5 rounded-full flex items-center justify-center shadow-xs ring-2 ring-white dark:ring-[#180e19] ${
-                            step.mode === 'walk'
-                              ? 'bg-pink-100 text-pink-600'
-                              : step.mode === 'mrt'
-                              ? 'bg-rose-500 text-white'
-                              : step.mode === 'bus'
-                              ? 'bg-pink-600 text-white'
-                              : 'bg-purple-600 text-white'
-                          }`}
-                        >
-                          <span className="material-symbols-outlined text-[12px]">
+                        {/* Step Icon */}
+                        <div className="absolute left-0 top-0.5 w-4 h-4 rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-[10px]">
+                          <span className="material-symbols-outlined text-[11px]">
                             {step.icon}
                           </span>
                         </div>
@@ -520,45 +508,45 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
                         {/* Step Details */}
                         <div className="min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <div className="font-bold text-xs leading-tight text-[#371329] dark:text-pink-100">
+                            <div className="font-bold text-xs leading-tight text-slate-200 font-sans">
                               {step.instruction}
                             </div>
-                            <span className="text-[10px] font-bold text-pink-500 shrink-0">
+                            <span className="text-[10px] font-bold text-cyan-400 shrink-0 font-mono">
                               {step.durationMinutes}m
                             </span>
                           </div>
 
                           {step.detail && (
-                            <p className="text-[11px] text-pink-600/80 dark:text-pink-300/80 mt-0.5">
+                            <p className="text-[10px] text-slate-400 mt-0.5 font-mono">
                               {step.detail}
                             </p>
                           )}
 
-                          {/* Expandable intermediate stops list */}
+                          {/* Expandable stops */}
                           {step.stopCount && step.stopsList && (
-                            <div className="mt-1.5">
+                            <div className="mt-1">
                               <button
                                 onClick={() =>
                                   setExpandedStepId(isExpanded ? null : step.id)
                                 }
-                                className="text-[10px] font-bold text-pink-600 dark:text-pink-300 hover:underline flex items-center gap-1"
+                                className="text-[10px] font-mono text-cyan-400 hover:underline flex items-center gap-1"
                               >
                                 <span>
-                                  {isExpanded ? 'Hide' : `Ride ${step.stopCount} stops`}
+                                  {isExpanded ? 'Hide stops' : `Corridor: ${step.stopCount} intermediate nodes`}
                                 </span>
-                                <span className="material-symbols-outlined text-[13px]">
+                                <span className="material-symbols-outlined text-[12px]">
                                   {isExpanded ? 'expand_less' : 'expand_more'}
                                 </span>
                               </button>
 
                               {isExpanded && (
-                                <div className="mt-2 pl-3 border-l-2 border-dashed border-pink-300 dark:border-pink-800 space-y-1">
+                                <div className="mt-1.5 pl-2.5 border-l border-slate-700 space-y-1">
                                   {step.stopsList.map((stName, sIdx) => (
                                     <div
                                       key={sIdx}
-                                      className="text-[10px] text-[#501c3d] dark:text-pink-200/80 flex items-center gap-1.5"
+                                      className="text-[10px] text-slate-400 flex items-center gap-1.5 font-mono"
                                     >
-                                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400"></span>
+                                      <span className="w-1 h-1 rounded-full bg-cyan-400"></span>
                                       <span>{stName}</span>
                                     </div>
                                   ))}
@@ -575,22 +563,22 @@ export const RoutePlanner: React.FC<RoutePlannerProps> = ({
             </div>
           )}
 
-          {/* Start Live Navigation Preview Button */}
+          {/* Start Simulation Execution Button */}
           {selectedRoute && (
             <div className="pt-1">
               <button
                 onClick={onToggleNavigation}
-                className={`w-full py-3 px-4 rounded-2xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 ${
+                className={`w-full py-2.5 px-4 rounded-xl font-mono font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 ${
                   isNavigating
-                    ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/25'
-                    : 'bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 hover:from-pink-600 hover:to-rose-600 text-white shadow-pink-500/30 hover:scale-[1.02]'
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/30'
+                    : 'bg-gradient-to-r from-cyan-500 via-sky-500 to-amber-400 hover:from-cyan-400 hover:to-amber-300 text-slate-950 shadow-cyan-500/20'
                 }`}
               >
-                <span className="material-symbols-outlined text-[18px]">
-                  {isNavigating ? 'stop_circle' : 'navigation'}
+                <span className="material-symbols-outlined text-[17px]">
+                  {isNavigating ? 'stop_circle' : 'bolt'}
                 </span>
                 <span>
-                  {isNavigating ? 'Stop Live Navigation Preview' : 'Start Live Trip Preview ✨'}
+                  {isNavigating ? 'TERMINATE TELEMETRY SIMULATION' : 'EXECUTE NEURAL ROUTE SIMULATION'}
                 </span>
               </button>
             </div>

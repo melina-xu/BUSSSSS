@@ -5,7 +5,7 @@ interface HeaderProps {
   theme: ThemeMode;
   onToggleTheme: () => void;
   searchQuery: string;
-  onSearchChange: (query: string) => void;
+  onSearchChange: (q: string) => void;
   stops: TransitStop[];
   onSelectStop: (stop: TransitStop) => void;
   activeCity: string;
@@ -27,195 +27,190 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenNotifications
 }) => {
   const isDark = theme === 'dark';
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [showCityMenu, setShowCityMenu] = useState(false);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
 
-  const cities = ['Singapore', 'New York City, NY', 'Calgary, Downtown'];
+  const CITIES = [
+    { id: 'Singapore', name: 'Marina Bay / Singapore FinTech', tag: 'SG-MBFC' },
+    { id: 'New York', name: 'Wall St / New York Executive', tag: 'NYC-200W' },
+    { id: 'San Francisco', name: 'Sand Hill / Silicon Valley AI', tag: 'SF-SHV' },
+    { id: 'London', name: 'Canary Wharf / London Quant', tag: 'LDN-CW' },
+    { id: 'Tokyo', name: 'Marunouchi / Tokyo High-Speed', tag: 'TYO-MRN' }
+  ];
 
-  const filteredStops = searchQuery.trim()
-    ? stops.filter(
-        (s) =>
-          s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.code.includes(searchQuery) ||
-          s.routes.some((r) => r.routeNumber.toLowerCase().includes(searchQuery.toLowerCase()) || r.routeName.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
-    : [];
+  const filteredStops = stops.filter(
+    (s) =>
+      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.code.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <header
-      id="app-header"
-      className={`fixed top-0 left-72 right-0 h-16 z-40 px-6 flex items-center justify-between border-b transition-colors duration-200 backdrop-blur-xl ${
+      id="aether-quant-header"
+      className={`fixed top-0 left-72 right-0 h-16 z-30 flex items-center justify-between px-6 border-b transition-all duration-300 ${
         isDark
-          ? 'bg-[#181119]/85 border-[#2e1c2a] text-[#fce7f3]'
-          : 'bg-[#fff5f8]/90 border-[#fbcfe8] text-[#371329] shadow-[0_1px_12px_rgba(244,114,182,0.08)]'
+          ? 'bg-[#080a0f]/90 border-slate-800/80 backdrop-blur-md text-slate-100'
+          : 'bg-white/90 border-slate-200 backdrop-blur-md text-slate-900 shadow-xs'
       }`}
     >
-      {/* Search Bar */}
-      <div className="flex-1 max-w-lg relative">
-        <div className="relative flex items-center">
-          <span
-            className={`material-symbols-outlined absolute left-3.5 text-[20px] transition-colors ${
-              isDark ? 'text-pink-400' : 'text-pink-500'
+      {/* Left: Financial / Transit Hub Selector + Bloomberg Ticker */}
+      <div className="flex items-center gap-4 flex-1 max-w-xl">
+        <div className="relative">
+          <select
+            value={activeCity}
+            onChange={(e) => onChangeCity(e.target.value)}
+            className={`appearance-none text-xs font-mono font-extrabold pl-8 pr-8 py-2 rounded-xl border transition-all cursor-pointer ${
+              isDark
+                ? 'bg-[#0e1320] border-cyan-500/30 text-cyan-300 hover:border-cyan-400 focus:ring-1 focus:ring-cyan-500'
+                : 'bg-slate-100 border-slate-300 text-slate-900 hover:border-cyan-600'
             }`}
           >
-            search
+            {CITIES.map((c) => (
+              <option key={c.id} value={c.id}>
+                [{c.tag}] {c.name}
+              </option>
+            ))}
+          </select>
+          <span className="material-symbols-outlined text-[16px] absolute left-2.5 top-2.5 text-cyan-400 pointer-events-none">
+            apartment
           </span>
+          <span className="material-symbols-outlined text-[16px] absolute right-2 top-2.5 text-slate-400 pointer-events-none">
+            expand_more
+          </span>
+        </div>
+
+        {/* Quant Ticker Strip */}
+        <div className="hidden lg:flex items-center gap-3 overflow-hidden text-[10px] font-mono whitespace-nowrap border-l border-slate-700/50 pl-4">
+          <div className="flex items-center gap-1.5 text-emerald-400">
+            <span className="font-bold">ALPHA:</span>
+            <span>+14.2%</span>
+            <span className="material-symbols-outlined text-[13px]">trending_up</span>
+          </div>
+          <span className="text-slate-600">•</span>
+          <div className="flex items-center gap-1.5 text-cyan-400">
+            <span className="font-bold">HSR LATENCY:</span>
+            <span>0.00s DELTA</span>
+          </div>
+          <span className="text-slate-600">•</span>
+          <div className="flex items-center gap-1.5 text-amber-400">
+            <span className="font-bold">FLEET CAP:</span>
+            <span>78.4%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Middle/Right: AI Prompt/Node Search Bar */}
+      <div className="relative w-80 max-w-md mx-4">
+        <div className="relative">
           <input
-            id="global-search-input"
             type="text"
+            placeholder="Search Node ID, corridor or coordinates..."
             value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            onFocus={() => setIsSearchFocused(true)}
-            onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-            placeholder="Search cute stops, MRT lines, cafes & routes... 🌸"
-            className={`w-full h-10 pl-11 pr-4 rounded-full text-xs sm:text-sm font-medium transition-all focus:outline-none ${
+            onChange={(e) => {
+              onSearchChange(e.target.value);
+              setShowSearchDropdown(true);
+            }}
+            onFocus={() => setShowSearchDropdown(true)}
+            onBlur={() => setTimeout(() => setShowSearchDropdown(false), 200)}
+            className={`w-full text-xs font-mono pl-9 pr-14 py-2 rounded-xl border transition-all ${
               isDark
-                ? 'bg-[#261625] text-pink-100 placeholder-pink-400/50 border border-pink-900/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30'
-                : 'bg-white text-[#371329] placeholder-pink-400/70 border border-pink-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-300 shadow-sm'
+                ? 'bg-[#0b0f19] border-slate-700 text-slate-100 placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50'
+                : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400 focus:border-cyan-600'
             }`}
           />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="absolute right-3 text-xs text-pink-400 hover:text-pink-600"
-            >
-              <span className="material-symbols-outlined text-[16px]">close</span>
-            </button>
-          )}
+          <span className="material-symbols-outlined text-[18px] absolute left-2.5 top-2.5 text-slate-400">
+            search
+          </span>
+          <span className="absolute right-2.5 top-2 text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
+            ⌘K
+          </span>
         </div>
 
         {/* Search Results Dropdown */}
-        {isSearchFocused && filteredStops.length > 0 && (
+        {showSearchDropdown && searchQuery.trim().length > 0 && (
           <div
-            className={`absolute top-12 left-0 right-0 rounded-2xl p-2.5 shadow-2xl z-50 border max-h-80 overflow-y-auto ${
-              isDark ? 'bg-[#20121e] border-[#381a34]' : 'bg-white border-pink-200'
+            className={`absolute left-0 right-0 top-11 rounded-xl border shadow-2xl overflow-hidden z-50 ${
+              isDark ? 'bg-[#0d121f] border-slate-700 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
             }`}
           >
-            <div className="text-[10px] font-bold tracking-wider uppercase px-3 py-1 text-pink-500 dark:text-pink-400 flex items-center gap-1">
-              <span>🌸</span>
-              <span>Matched Transit Stops</span>
+            <div className="p-2 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+              Matched Telemetry Nodes ({filteredStops.length})
             </div>
-            {filteredStops.map((stop) => (
-              <div
-                key={stop.id}
-                onMouseDown={() => {
-                  onSelectStop(stop);
-                  onSearchChange('');
-                }}
-                className={`p-2.5 rounded-xl cursor-pointer flex items-center justify-between transition-colors ${
-                  isDark ? 'hover:bg-[#2e182b]' : 'hover:bg-pink-50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isDark ? 'bg-pink-950/60 text-pink-300' : 'bg-pink-100 text-pink-600'}`}>
-                    <span className="material-symbols-outlined text-[18px]">location_on</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-xs text-[#371329] dark:text-pink-100">{stop.name}</div>
-                    <div className="text-[10px] text-pink-500/80 dark:text-pink-300/70">
-                      ID: {stop.code} • {stop.distanceDisplay}
+            <div className="max-h-60 overflow-y-auto custom-scrollbar">
+              {filteredStops.map((stop) => (
+                <div
+                  key={stop.id}
+                  onClick={() => {
+                    onSelectStop(stop);
+                    setShowSearchDropdown(false);
+                  }}
+                  className={`p-3 cursor-pointer transition-colors border-b last:border-b-0 flex items-center justify-between ${
+                    isDark ? 'hover:bg-slate-800/80 border-slate-800/50' : 'hover:bg-slate-100 border-slate-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="material-symbols-outlined text-[18px] text-cyan-400">
+                      fidget_spinner
+                    </span>
+                    <div>
+                      <div className="text-xs font-bold font-mono">{stop.name}</div>
+                      <div className="text-[10px] font-mono text-slate-400">{stop.distanceDisplay}</div>
                     </div>
                   </div>
-                </div>
-                <div className="flex gap-1.5">
-                  {stop.routes.slice(0, 2).map((r, i) => (
-                    <span
-                      key={i}
-                      className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-500 text-white shadow-xs"
-                    >
-                      {r.routeNumber}
+                  <div className="text-right font-mono">
+                    <span className="text-[10px] font-black text-cyan-400 px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20">
+                      {stop.code}
                     </span>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </div>
 
-      {/* Right Header Action Items */}
-      <div className="flex items-center gap-3 ml-6">
-        {/* City Selector */}
-        <div className="relative">
-          <button
-            id="city-selector-btn"
-            onClick={() => setShowCityMenu(!showCityMenu)}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 border transition-all ${
-              isDark
-                ? 'bg-[#261625] text-pink-200 border-pink-900/40 hover:bg-[#341b31]'
-                : 'bg-white text-pink-950 border-pink-200 hover:bg-pink-50 shadow-sm'
-            }`}
-          >
-            <span className="text-sm">🌸</span>
-            <span className="max-w-[110px] truncate">{activeCity}</span>
-            <span className="material-symbols-outlined text-[16px] text-pink-400">expand_more</span>
-          </button>
-
-          {showCityMenu && (
-            <div
-              className={`absolute right-0 top-10 w-48 rounded-2xl p-1.5 shadow-2xl z-50 border ${
-                isDark ? 'bg-[#20121e] border-[#381a34] text-pink-100' : 'bg-white border-pink-200 text-[#371329]'
-              }`}
-            >
-              <div className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 text-pink-500">
-                Choose City Hub
-              </div>
-              {cities.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => {
-                    onChangeCity(c);
-                    setShowCityMenu(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between ${
-                    activeCity === c
-                      ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold'
-                      : isDark
-                      ? 'hover:bg-[#2e182b]'
-                      : 'hover:bg-pink-50 text-[#371329]'
-                  }`}
-                >
-                  <span>{c}</span>
-                  {activeCity === c && <span className="text-xs">✨</span>}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Notifications Icon Pill */}
+      {/* Right Controls: Notifications & Dark/Light Mode */}
+      <div className="flex items-center gap-2.5">
+        {/* Risk Alerts Notification Trigger */}
         <button
-          id="header-notification-btn"
           onClick={onOpenNotifications}
-          className={`relative w-9 h-9 rounded-full flex items-center justify-center border transition-all ${
+          className={`relative p-2 rounded-xl border transition-all ${
             isDark
-              ? 'bg-[#261625] text-pink-200 border-pink-900/40 hover:bg-[#341b31]'
-              : 'bg-white text-pink-600 border-pink-200 hover:bg-pink-50 shadow-sm'
+              ? 'bg-[#0e1320] border-slate-700 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40'
+              : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900'
           }`}
-          title="Notifications & Alerts"
+          title="Network Advisories"
         >
-          <span className="material-symbols-outlined text-[19px]">notifications</span>
+          <span className="material-symbols-outlined text-[20px]">crisis_alert</span>
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center ring-2 ring-white dark:ring-[#181119]">
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-slate-950 font-mono text-[9px] font-black flex items-center justify-center shadow-md">
               {unreadCount}
             </span>
           )}
         </button>
 
-        {/* Theme Mode Toggle (Cute Pink Sun / Sparkle Moon) */}
+        {/* Theme Toggler */}
         <button
-          id="theme-toggle-btn"
           onClick={onToggleTheme}
-          className={`px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border transition-all ${
+          className={`p-2 rounded-xl border transition-all flex items-center gap-1.5 ${
             isDark
-              ? 'bg-gradient-to-r from-pink-950 to-purple-950 text-pink-200 border-pink-800 hover:border-pink-600'
-              : 'bg-gradient-to-r from-pink-50 to-rose-100 text-pink-700 border-pink-200 hover:border-pink-300 shadow-sm'
+              ? 'bg-[#0e1320] border-slate-700 text-amber-300 hover:border-amber-400/40'
+              : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900'
           }`}
-          title={`Switch to ${isDark ? 'Light Blossom' : 'Velvet Night'} mode`}
+          title={isDark ? 'Switch to Platinum Executive (Light)' : 'Switch to Obsidian Terminal (Dark)'}
         >
-          <span>{isDark ? '🌙' : '🌸'}</span>
-          <span className="hidden sm:inline font-semibold">{isDark ? 'Velvet' : 'Blossom'}</span>
+          <span className="material-symbols-outlined text-[20px]">
+            {isDark ? 'light_mode' : 'dark_mode'}
+          </span>
         </button>
+
+        {/* Executive User Avatar */}
+        <div className="flex items-center gap-2 pl-2 border-l border-slate-700/60">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-amber-400 p-[1px]">
+            <div className="w-full h-full rounded-[7px] bg-[#090d16] flex items-center justify-center font-mono font-bold text-xs text-cyan-300">
+              GS
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );

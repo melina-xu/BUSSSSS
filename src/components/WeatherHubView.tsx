@@ -17,104 +17,108 @@ export const WeatherHubView: React.FC<WeatherHubViewProps> = ({
   const [selectedHour, setSelectedHour] = useState<number | null>(0);
 
   return (
-    <div id="girly-weather-hub-view" className="flex flex-col w-full h-[calc(100vh-64px)] overflow-y-auto p-6 custom-scrollbar">
+    <div id="aether-quant-weather-hub-view" className="flex flex-col w-full h-[calc(100vh-64px)] overflow-y-auto p-6 custom-scrollbar font-mono">
       <div className="max-w-7xl mx-auto w-full space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="text-[11px] font-extrabold text-pink-500 tracking-widest uppercase flex items-center gap-1">
-              <span>🌸</span> Commuter Atmosphere & Sky
+            <div className="text-[10px] font-extrabold text-cyan-400 tracking-widest uppercase flex items-center gap-1.5">
+              <span>ATMOSPHERIC TELEMETRY</span>
             </div>
-            <h1 className="text-3xl font-black tracking-tight mt-1 flex items-center gap-2">
-              <span>Weather Hub & Blossom Radar</span>
-              <span>🌷</span>
+            <h1 className="text-2xl font-black tracking-tight mt-1 text-white dark:text-white font-sans">
+              Micro-Climate Friction Matrix & Doppler Radar
             </h1>
           </div>
 
           <div className="flex items-center gap-3">
             <div
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border ${
                 isDark
-                  ? 'bg-[#20121e] border-[#381a34] text-pink-200'
-                  : 'bg-white border-pink-200 text-[#371329] shadow-xs'
+                  ? 'bg-[#090d16] border-slate-800 text-slate-200'
+                  : 'bg-white border-slate-300 text-slate-900 shadow-xs'
               }`}
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse"></span>
-              <span>Live Telemetry • {activeCity || weather.city} ✨</span>
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>DOPPLER SENSORS: 100% RESOLUTION • {activeCity || weather.city}</span>
             </div>
           </div>
         </div>
 
-        {/* Top 2-Card Row: Current Conditions & Hourly Forecast */}
+        {/* Top 2-Card Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Current Conditions Card */}
           <div
-            className={`rounded-3xl p-5 border shadow-sm flex flex-col justify-between ${
-              isDark ? 'bg-[#20121e] border-[#381a34] text-pink-50' : 'bg-white border-pink-200 text-[#371329]'
+            className={`rounded-2xl p-5 border shadow-sm flex flex-col justify-between ${
+              isDark ? 'bg-[#090d16] border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
             }`}
           >
             <div>
-              <div className="text-[10px] font-extrabold tracking-widest uppercase text-pink-500 mb-3 flex items-center gap-1">
-                <span>🌸</span> Current Atmosphere
+              <div className="text-[10px] font-extrabold tracking-widest uppercase text-cyan-400 mb-3 flex items-center gap-1.5">
+                <span>ATMOSPHERIC VECTOR STATUS</span>
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-4xl font-black font-timer-display">{weather.temp}°{weather.unit}</div>
-                  <div className="text-sm font-extrabold text-rose-500 mt-1 flex items-center gap-1">
-                    <span>✨</span>
+                  <div className="text-3xl font-black text-white dark:text-white">{weather.temp}°{weather.unit}</div>
+                  <div className="text-xs font-bold text-cyan-400 mt-1 flex items-center gap-1">
                     <span>{weather.condition}</span>
                   </div>
                 </div>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white shadow-md shadow-pink-500/25">
-                  <span className="material-symbols-outlined text-3xl">wb_sunny</span>
+                <div className="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-2xl">wb_sunny</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-pink-100 dark:border-pink-900/30">
-              <p className="text-xs text-pink-600 dark:text-pink-200/80 leading-relaxed font-medium">
+            <div className="mt-4 pt-3 border-t border-slate-800 space-y-2">
+              <p className="text-xs text-slate-300 font-sans leading-relaxed">
                 {weather.impactSummary}
               </p>
-              <div className="mt-2.5 flex items-center gap-1.5 text-[11px] font-bold text-pink-500">
-                <span>🧴</span>
-                <span>Pro tip: UV index 7 — remember your sunscreen & cute hat!</span>
+              <div className="grid grid-cols-2 gap-2 text-[10px] pt-1">
+                <div className="p-2 rounded bg-[#06080d] border border-slate-800">
+                  <span className="text-slate-500 block">FRICTION INDEX</span>
+                  <span className="font-bold text-emerald-400">{weather.frictionIndex || '0.04 (NOMINAL)'}</span>
+                </div>
+                <div className="p-2 rounded bg-[#06080d] border border-slate-800">
+                  <span className="text-slate-500 block">BAROMETRIC</span>
+                  <span className="font-bold text-cyan-400">{weather.pressureHpa || 1014.2} hPa</span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Hourly Forecast SVG Chart */}
           <div
-            className={`md:col-span-2 rounded-3xl p-5 border shadow-sm flex flex-col justify-between ${
-              isDark ? 'bg-[#20121e] border-[#381a34] text-pink-50' : 'bg-white border-pink-200 text-[#371329]'
+            className={`md:col-span-2 rounded-2xl p-5 border shadow-sm flex flex-col justify-between ${
+              isDark ? 'bg-[#090d16] border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <div className="text-[10px] font-extrabold tracking-widest uppercase text-pink-500 flex items-center gap-1">
-                <span>🌷</span> Hourly Commuter Temperature
+              <div className="text-[10px] font-extrabold tracking-widest uppercase text-cyan-400 flex items-center gap-1.5">
+                <span>HOURLY TEMPERATURE & FRICTION PREDICTION</span>
               </div>
-              <span className="text-xs text-pink-400 font-bold">Pleasant Breeze</span>
+              <span className="text-xs text-slate-400 font-mono font-bold">ZERO CORRIDOR LATENCY</span>
             </div>
 
             {/* SVG spline chart with hourly points */}
             <div className="relative h-28 w-full mt-2">
               <svg className="w-full h-full overflow-visible" viewBox="0 0 500 80" preserveAspectRatio="none">
                 <defs>
-                  <linearGradient id="girlyWeatherCurveGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#ec4899" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#ec4899" stopOpacity="0.0" />
+                  <linearGradient id="quantWeatherCurveGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#00f0ff" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
                 {/* Area under curve */}
                 <path
                   d="M 0,35 Q 60,20 125,15 T 250,25 T 375,45 T 500,60 L 500,80 L 0,80 Z"
-                  fill="url(#girlyWeatherCurveGrad)"
+                  fill="url(#quantWeatherCurveGrad)"
                 />
                 {/* Curve line */}
                 <path
                   d="M 0,35 Q 60,20 125,15 T 250,25 T 375,45 T 500,60"
                   fill="none"
-                  stroke="#f43f5e"
-                  strokeWidth="3.5"
+                  stroke="#00f0ff"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                 />
               </svg>
@@ -125,68 +129,67 @@ export const WeatherHubView: React.FC<WeatherHubViewProps> = ({
                   <div
                     key={idx}
                     onClick={() => setSelectedHour(idx)}
-                    className={`flex flex-col items-center cursor-pointer transition-transform hover:scale-110 p-1 rounded-xl ${
-                      selectedHour === idx ? 'bg-pink-100/70 dark:bg-pink-950/70' : ''
+                    className={`flex flex-col items-center cursor-pointer transition-transform hover:scale-110 p-1 rounded-lg ${
+                      selectedHour === idx ? 'bg-cyan-500/20 border border-cyan-500/40' : ''
                     }`}
                   >
-                    <span className="text-xs font-black text-rose-500">{hour.temp}°</span>
-                    <span className="text-[10px] text-pink-400">{hour.time}</span>
+                    <span className="text-xs font-black text-cyan-400">{hour.temp}°</span>
+                    <span className="text-[10px] text-slate-400">{hour.time}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Forecast footer tags */}
-            <div className="flex items-center justify-between text-[11px] text-pink-500 pt-3 border-t border-pink-100 dark:border-pink-900/30">
-              <span className="font-semibold">Precipitation: 10% • Wind: 12 km/h</span>
-              <span className="font-bold">✨ Great commute conditions</span>
+            <div className="flex items-center justify-between text-[10px] text-slate-400 pt-3 border-t border-slate-800">
+              <span>PRECIPITATION: &lt;5% • OPTICAL VISIBILITY: {weather.visibilityKm || 16} KM</span>
+              <span className="font-bold text-emerald-400">NOMINAL CONDITIONS</span>
             </div>
           </div>
         </div>
 
         {/* Live Weather Radar Card */}
         <div
-          className={`rounded-3xl p-5 border shadow-sm ${
-            isDark ? 'bg-[#20121e] border-[#381a34] text-pink-50' : 'bg-white border-pink-200 text-[#371329]'
+          className={`rounded-2xl p-5 border shadow-sm ${
+            isDark ? 'bg-[#090d16] border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
           }`}
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-black text-base flex items-center gap-1.5">
-                <span>🌸</span>
-                <span>Precipitation & Cloud Radar</span>
+              <h3 className="font-bold text-sm flex items-center gap-1.5 font-sans">
+                <span>DOPPLER SATELLITE & CORRIDOR THERMAL SCAN</span>
               </h3>
-              <p className="text-xs text-pink-400">High-resolution Doppler radar telemetry</p>
+              <p className="text-[10px] text-slate-400">High-altitude synthetic aperture radar telemetry</p>
             </div>
 
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setRadarZoom((p) => Math.min(p + 0.2, 1.6))}
-                className="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-300 font-bold flex items-center justify-center hover:bg-pink-200"
+                className="w-7 h-7 rounded-lg bg-slate-800 text-cyan-300 font-bold flex items-center justify-center hover:bg-slate-700"
               >
                 +
               </button>
               <button
                 onClick={() => setRadarZoom((p) => Math.max(p - 0.2, 0.8))}
-                className="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-300 font-bold flex items-center justify-center hover:bg-pink-200"
+                className="w-7 h-7 rounded-lg bg-slate-800 text-cyan-300 font-bold flex items-center justify-center hover:bg-slate-700"
               >
                 -
               </button>
             </div>
           </div>
 
-          <div className="relative h-72 w-full rounded-2xl overflow-hidden border border-pink-200 dark:border-pink-900/40">
+          <div className="relative h-72 w-full rounded-xl overflow-hidden border border-slate-800">
             <div
               className="absolute inset-0 bg-cover bg-center transition-transform duration-500"
               style={{
                 backgroundImage: `url('${MAP_IMAGES.nycRadarNight}')`,
                 transform: `scale(${radarZoom})`,
-                filter: isDark ? 'saturate(1.2) hue-rotate(320deg)' : 'hue-rotate(320deg) brightness(1.05)'
+                filter: isDark ? 'contrast(1.3) brightness(0.9)' : 'contrast(1.1) brightness(1.0)'
               }}
             />
-            <div className="absolute top-3 left-3 bg-[#1e101f]/85 border border-pink-500/40 text-pink-200 px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
-              <span>Live Cloud Doppler ✨</span>
+            <div className="absolute top-3 left-3 bg-[#090d16]/90 border border-cyan-500/40 text-cyan-300 px-3 py-1 rounded-lg text-xs font-bold backdrop-blur-md flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>SYNTHETIC DOPPLER • LIVE INGESTION</span>
             </div>
           </div>
         </div>

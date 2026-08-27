@@ -16,123 +16,171 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const isDark = theme === 'dark';
 
-  const navItems: { id: NavTab; label: string; icon: string; badge?: number; emoji?: string }[] = [
-    { id: 'dashboard', label: 'Trip Planner & Map', icon: 'explore', emoji: '✨' },
-    { id: 'nearby-stops', label: 'Nearby Stops', icon: 'location_on', emoji: '🌸' },
-    { id: 'saved-routes', label: 'My Favorite Routes', icon: 'favorite', emoji: '💖' },
-    { id: 'alerts', label: 'Transit Updates', icon: 'notifications_active', badge: unreadAlertsCount, emoji: '🎀' },
-    { id: 'weather-hub', label: 'Weather & Forecast', icon: 'filter_drama', emoji: '🌷' }
+  const navItems: { id: NavTab; label: string; subLabel: string; icon: string; badge?: string }[] = [
+    {
+      id: 'dashboard',
+      label: 'Executive Cockpit',
+      subLabel: 'Neural Routing & Map HUD',
+      icon: 'hub'
+    },
+    {
+      id: 'nearby-stops',
+      label: 'Nodal Telemetry',
+      subLabel: 'Live Sensor Matrix',
+      icon: 'radar'
+    },
+    {
+      id: 'saved-routes',
+      label: 'Corridor Portfolio',
+      subLabel: 'Alpha Yield Commutes',
+      icon: 'analytics'
+    },
+    {
+      id: 'alerts',
+      label: 'Risk & Advisories',
+      subLabel: 'Arbitrage & Alerts',
+      icon: 'crisis_alert',
+      badge: unreadAlertsCount > 0 ? `${unreadAlertsCount}` : undefined
+    },
+    {
+      id: 'weather-hub',
+      label: 'Doppler Atmospheric',
+      subLabel: 'Friction Index Matrix',
+      icon: 'speed'
+    }
   ];
 
   return (
     <aside
-      id="app-sidebar"
-      className={`fixed left-0 top-0 h-full w-72 z-50 flex flex-col transition-colors duration-200 border-r select-none ${
+      id="aether-quant-sidebar"
+      className={`fixed top-0 left-0 bottom-0 w-72 z-40 flex flex-col justify-between border-r transition-all duration-300 ${
         isDark
-          ? 'bg-[#181119] border-[#2e1c2a] text-[#fce7f3]'
-          : 'bg-[#fff5f8] border-[#fbcfe8] text-[#371329]'
+          ? 'bg-[#080a0f] border-slate-800/80 text-slate-100'
+          : 'bg-[#f8fafc] border-slate-200 text-slate-900 shadow-sm'
       }`}
     >
-      {/* Brand Header */}
-      <div className="h-20 flex items-center px-6 border-b border-pink-100 dark:border-[#2e1c2a]/80">
-        <div
-          onClick={() => onTabChange('dashboard')}
-          className="flex items-center gap-3 cursor-pointer group w-full"
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => { if (e.key === 'Enter') onTabChange('dashboard'); }}
-        >
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 via-rose-400 to-pink-300 flex items-center justify-center text-white shadow-md shadow-pink-500/30 group-hover:scale-105 transition-transform">
-            <span className="material-symbols-outlined text-[22px]">local_florist</span>
-          </div>
-          <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600 dark:from-pink-300 dark:via-rose-300 dark:to-purple-300 bg-clip-text text-transparent">
-                Urban Blossom
-              </span>
-              <span className="text-xs">🌸</span>
+      {/* Top Branding Section */}
+      <div className="p-5">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-sky-600 to-amber-400 p-[1.5px] shadow-lg shadow-cyan-500/20">
+            <div className="w-full h-full rounded-[10px] bg-[#090d16] flex items-center justify-center text-cyan-400">
+              <span className="material-symbols-outlined text-[24px]">terminal</span>
             </div>
-            <span className="text-[10px] font-semibold tracking-wider text-pink-400 dark:text-pink-300/70 uppercase">
-              Smart Transit & Commute
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <h1 className="font-extrabold text-sm tracking-tight text-white dark:text-white font-quant">
+                AETHER<span className="text-cyan-400 font-bold">.QUANT</span>
+              </h1>
+              <span className="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                GS-v4.8
+              </span>
+            </div>
+            <p className="text-[10px] font-mono text-slate-400 tracking-wide mt-0.5">
+              Autonomous Mobility Desk
+            </p>
+          </div>
+        </div>
+
+        {/* Live Cluster Status Badge */}
+        <div className="mt-4 p-2.5 rounded-xl bg-[#0e1320] border border-cyan-500/20 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-[10px] font-mono font-bold text-slate-300">
+              ML CLUSTER: <span className="text-emerald-400">ONLINE</span>
             </span>
           </div>
+          <span className="text-[9px] font-mono text-cyan-400">0.04ms</span>
         </div>
       </div>
 
-      {/* Navigation links */}
-      <nav className="flex-1 px-4 py-5 flex flex-col gap-1.5">
-        <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-pink-400/80 dark:text-pink-300/60">
-          Navigation
+      {/* Navigation Links */}
+      <div className="px-3 flex-1 overflow-y-auto space-y-1 py-2 custom-scrollbar">
+        <div className="px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
+          Executive Workspaces
         </div>
         {navItems.map((item) => {
           const isActive = currentTab === item.id;
           return (
             <button
               key={item.id}
-              id={`nav-link-${item.id}`}
               onClick={() => onTabChange(item.id)}
-              className={`w-full flex items-center px-4 py-3 rounded-2xl text-left transition-all duration-200 relative group ${
+              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-all group ${
                 isActive
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold shadow-md shadow-pink-500/25 scale-[1.02]'
+                  ? isDark
+                    ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/10'
+                    : 'bg-cyan-600 text-white shadow-md shadow-cyan-600/25'
                   : isDark
-                  ? 'text-[#fce7f3]/80 hover:bg-[#281525] hover:text-pink-200'
-                  : 'text-[#501c3d] hover:bg-pink-100/70 hover:text-pink-900'
+                  ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 border border-transparent'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-transparent'
               }`}
             >
-              <div className={`w-8 h-8 rounded-xl flex items-center justify-center mr-2.5 transition-colors ${
-                isActive
-                  ? 'bg-white/20 text-white'
-                  : isDark
-                  ? 'bg-[#2a1727] text-pink-300 group-hover:bg-[#381a34]'
-                  : 'bg-pink-100 text-pink-600 group-hover:bg-pink-200'
-              }`}>
-                <span className="material-symbols-outlined text-[19px]">
+              <div className="flex items-center gap-3">
+                <span
+                  className={`material-symbols-outlined text-[20px] transition-colors ${
+                    isActive
+                      ? isDark
+                        ? 'text-cyan-400'
+                        : 'text-white'
+                      : isDark
+                      ? 'text-slate-400 group-hover:text-cyan-400'
+                      : 'text-slate-500 group-hover:text-cyan-600'
+                  }`}
+                >
                   {item.icon}
                 </span>
+                <div>
+                  <div className="font-bold text-xs tracking-tight">{item.label}</div>
+                  <div
+                    className={`text-[10px] font-mono ${
+                      isActive ? (isDark ? 'text-cyan-300/80' : 'text-cyan-100') : 'text-slate-500'
+                    }`}
+                  >
+                    {item.subLabel}
+                  </div>
+                </div>
               </div>
-              <span className="text-[13px] flex-1 font-semibold tracking-wide">
-                {item.label}
-              </span>
-              {item.badge !== undefined && item.badge > 0 ? (
+
+              {item.badge && (
                 <span
-                  className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
+                  className={`text-[10px] font-mono font-black px-2 py-0.5 rounded-full ${
                     isActive
-                      ? 'bg-white text-pink-600'
-                      : 'bg-rose-500 text-white shadow-sm'
+                      ? isDark
+                        ? 'bg-amber-400 text-slate-950'
+                        : 'bg-amber-300 text-slate-900'
+                      : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                   }`}
                 >
                   {item.badge}
-                </span>
-              ) : (
-                <span className="text-xs opacity-70 group-hover:scale-110 transition-transform">
-                  {item.emoji}
                 </span>
               )}
             </button>
           );
         })}
-      </nav>
+      </div>
 
-      {/* Bottom Status / Cute Commuter Profile Card */}
-      <div className={`p-4 border-t ${isDark ? 'border-[#2e1c2a] bg-[#1d121f]' : 'border-pink-200/70 bg-[#fff0f5]'}`}>
-        <div className="flex items-center gap-3 p-2.5 rounded-2xl bg-white/70 dark:bg-[#281525]/90 border border-pink-200/50 dark:border-pink-900/40 shadow-sm">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-400 to-pink-300 flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-pink-200 dark:ring-pink-900">
-            🌸
+      {/* System Telemetry & Quantitative KPI Widget */}
+      <div className="p-4 border-t border-slate-800/60 space-y-3">
+        <div className="p-3 rounded-xl bg-[#0b0f19] border border-slate-800 space-y-2">
+          <div className="flex items-center justify-between text-[10px] font-mono">
+            <span className="text-slate-400">NEURAL ACCURACY</span>
+            <span className="font-bold text-cyan-400">99.87%</span>
           </div>
-          <div className="flex flex-col min-w-0 flex-1">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#371329] dark:text-pink-100 truncate">
-                Sweet Commuter
-              </span>
-              <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-pink-500 text-white">
-                VIP
-              </span>
-            </div>
-            <span className="text-[10px] text-pink-500 dark:text-pink-300/80 font-medium flex items-center gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              All lines smooth today ✨
-            </span>
+          <div className="w-full bg-slate-800 rounded-full h-1 overflow-hidden">
+            <div className="bg-gradient-to-r from-cyan-500 to-amber-400 h-1 rounded-full w-[99.87%]"></div>
           </div>
+          <div className="flex items-center justify-between text-[10px] font-mono pt-1">
+            <span className="text-slate-400">ALPHA TIME SAVED</span>
+            <span className="font-bold text-emerald-400">+14.2 min/day</span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 px-1">
+          <span>DESK ID: GS-NYC-SG-01</span>
+          <span className="text-amber-400 font-bold">SECURE TLS 1.3</span>
         </div>
       </div>
     </aside>

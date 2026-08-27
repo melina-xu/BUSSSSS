@@ -13,7 +13,7 @@ import { NotificationToast } from './components/NotificationToast';
 import { AlternativesModal } from './components/AlternativesModal';
 
 export default function App() {
-  const [theme, setTheme] = useState<ThemeMode>('light');
+  const [theme, setTheme] = useState<ThemeMode>('dark');
   const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
   const [activeCity, setActiveCity] = useState<string>('Singapore');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -26,9 +26,9 @@ export default function App() {
   const [activeAlertDetail, setActiveAlertDetail] = useState<NetworkAlert | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState({
-    title: 'Bus 196 Arriving ✨',
-    message: 'Arriving at Capitol Sakura Concourse in 2 mins 🌸',
-    routeNumber: '196'
+    title: 'HSR-01 Inbound Vector Locked',
+    message: 'Approaching Marina Bay Financial Concourse in 1.8 mins (P99: 0.04m)',
+    routeNumber: 'HSR-01'
   });
 
   // Sync theme with document class
@@ -60,9 +60,9 @@ export default function App() {
 
   const handleSimulateArrival = () => {
     setToastMessage({
-      title: 'Bus 196 Arriving ✨',
-      message: 'Arriving at Capitol Sakura Concourse in 2 mins 🌸',
-      routeNumber: '196'
+      title: 'HSR-01 Inbound Vector Locked',
+      message: 'Approaching Marina Bay Financial Concourse in 1.8 mins (P99: 0.04m)',
+      routeNumber: 'HSR-01'
     });
     setShowToast(true);
   };
@@ -80,9 +80,9 @@ export default function App() {
 
   return (
     <div
-      id="urban-blossom-app"
+      id="aether-quant-app"
       className={`min-h-screen w-full transition-colors duration-200 ${
-        theme === 'dark' ? 'bg-[#140b15] text-[#fce7f3]' : 'bg-[#fff5f8] text-[#371329]'
+        theme === 'dark' ? 'bg-[#06080d] text-slate-100' : 'bg-slate-100 text-slate-900'
       }`}
     >
       {/* Fixed Sidebar */}

@@ -36,7 +36,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 }) => {
   const isDark = theme === 'dark';
   const [zoom, setZoom] = useState(1);
-  const [activeLayer, setActiveLayer] = useState<'transit' | 'satellite' | 'radar'>('transit');
+  const [activeLayer, setActiveLayer] = useState<'neural' | 'radar' | 'satellite'>('neural');
   const [showLayerMenu, setShowLayerMenu] = useState(false);
   const [liveTracking, setLiveTracking] = useState(true);
 
@@ -96,13 +96,10 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
   const navPos = getNavCoordinates();
 
-  // Select appropriate map image based on city, theme, and mode
+  // Select appropriate map background
   const getMapBackground = () => {
-    if (mode === 'radar') {
+    if (activeLayer === 'radar' || mode === 'radar') {
       return MAP_IMAGES.nycRadarNight;
-    }
-    if (activeCity.includes('Calgary')) {
-      return MAP_IMAGES.calgaryLight;
     }
     if (isDark) {
       return MAP_IMAGES.singaporeNight;
@@ -126,9 +123,9 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
   return (
     <div
-      id="girly-transit-map-container"
+      id="aether-quant-map-container"
       className={`relative w-full h-full overflow-hidden select-none ${className} ${
-        isDark ? 'bg-[#181017]' : 'bg-[#fff0f5]'
+        isDark ? 'bg-[#06080d]' : 'bg-[#0f172a]'
       }`}
     >
       {/* Background Map Image with scale transform */}
@@ -138,20 +135,31 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
           backgroundImage: `url('${getMapBackground()}')`,
           transform: `scale(${zoom})`,
           transformOrigin: 'center center',
-          filter: isDark ? 'brightness(0.85) saturate(1.1)' : 'saturate(1.05) contrast(0.95)'
+          filter: isDark
+            ? 'brightness(0.65) contrast(1.25) saturate(1.2)'
+            : 'brightness(0.85) contrast(1.15) saturate(1.1)'
         }}
       />
 
-      {/* Pastel Soft Vignette Overlay */}
+      {/* High-Tech Tactical Grid & Vignette Overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-20"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(0, 240, 255, 0.15) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(0, 240, 255, 0.15) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px'
+        }}
+      />
+
       <div
         className={`absolute inset-0 pointer-events-none transition-colors duration-300 ${
           isDark
-            ? 'bg-gradient-to-t from-[#181119]/90 via-[#181119]/20 to-[#181119]/40'
-            : 'bg-gradient-to-t from-[#fff5f8]/50 via-transparent to-transparent'
+            ? 'bg-gradient-to-t from-[#06080d]/90 via-[#06080d]/30 to-[#06080d]/50'
+            : 'bg-gradient-to-t from-[#090d16]/80 via-transparent to-transparent'
         }`}
       />
 
-      {/* SVG Vector Route Polyline Layer with Rose / Pastel Gradients */}
+      {/* SVG Vector Route Polyline Layer with Electric Cyan & Gold Gradients */}
       {activeRoute && activeRoute.polyline && (
         <svg
           viewBox="0 0 1000 1000"
@@ -162,36 +170,36 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
           }}
         >
           <defs>
-            <linearGradient id="routeGradientPinkTransit" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f43f5e" />
-              <stop offset="50%" stopColor="#ec4899" />
-              <stop offset="100%" stopColor="#a855f7" />
+            <linearGradient id="routeGradientCyanHFT" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#00f0ff" />
+              <stop offset="50%" stopColor="#38bdf8" />
+              <stop offset="100%" stopColor="#f59e0b" />
             </linearGradient>
-            <linearGradient id="routeGradientCandyCar" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#fb7185" />
-              <stop offset="60%" stopColor="#f43f5e" />
-              <stop offset="100%" stopColor="#db2777" />
+            <linearGradient id="routeGradientCarAutonomous" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#38bdf8" />
+              <stop offset="60%" stopColor="#0ea5e9" />
+              <stop offset="100%" stopColor="#0284c7" />
             </linearGradient>
-            <linearGradient id="routeGradientWalk" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ec4899" />
-              <stop offset="100%" stopColor="#f472b6" />
+            <linearGradient id="routeGradientWalkSkybridge" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#10b981" />
+              <stop offset="100%" stopColor="#34d399" />
             </linearGradient>
-            <filter id="routeGlowPink" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#f43f5e" floodOpacity="0.45" />
+            <filter id="routeGlowCyan" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#00f0ff" floodOpacity="0.8" />
             </filter>
           </defs>
 
-          {/* Alternative Route Polyline (Soft Pastel Pink Dashed) */}
+          {/* Alternative Route Polyline (Gold Dashed Alpha) */}
           {activeRoute.alternativesPolyline && (
             <path
               d={formatSvgPath(activeRoute.alternativesPolyline)}
               fill="none"
-              stroke={isDark ? '#be185d' : '#f472b6'}
-              strokeWidth="5"
+              stroke="#eab308"
+              strokeWidth="4"
               strokeDasharray="6 6"
               strokeLinecap="round"
               strokeLinejoin="round"
-              opacity="0.6"
+              opacity="0.75"
             />
           )}
 
@@ -199,12 +207,12 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
           <path
             d={formatSvgPath(activeRoute.polyline)}
             fill="none"
-            stroke={isDark ? '#2a1126' : '#ffffff'}
-            strokeWidth={activeRoute.mode === 'walk' ? '8' : '11'}
+            stroke="#00f0ff"
+            strokeWidth={activeRoute.mode === 'walk' ? '7' : '10'}
             strokeLinecap="round"
             strokeLinejoin="round"
-            filter="url(#routeGlowPink)"
-            opacity="0.95"
+            filter="url(#routeGlowCyan)"
+            opacity="0.9"
           />
 
           {/* Main Active Route Polyline Foreground */}
@@ -213,12 +221,12 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
             fill="none"
             stroke={
               activeRoute.mode === 'transit'
-                ? 'url(#routeGradientPinkTransit)'
+                ? 'url(#routeGradientCyanHFT)'
                 : activeRoute.mode === 'car'
-                ? 'url(#routeGradientCandyCar)'
-                : 'url(#routeGradientWalk)'
+                ? 'url(#routeGradientCarAutonomous)'
+                : 'url(#routeGradientWalkSkybridge)'
             }
-            strokeWidth={activeRoute.mode === 'walk' ? '5' : '7'}
+            strokeWidth={activeRoute.mode === 'walk' ? '4' : '6'}
             strokeDasharray={activeRoute.mode === 'walk' ? '8 8' : 'none'}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -226,7 +234,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         </svg>
       )}
 
-      {/* Origin Marker Pin (A) - Strawberry Blossom */}
+      {/* Origin Marker Pin (A) - High Precision GPS Node */}
       {origin && (
         <div
           className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125 cursor-pointer group"
@@ -234,21 +242,21 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
             top: `${origin.coordinates.y}%`,
             left: `${origin.coordinates.x}%`
           }}
-          title={`Origin: ${origin.name}`}
+          title={`Origin Node: ${origin.name}`}
         >
           <div className="flex flex-col items-center">
-            <div className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[10px] font-black uppercase shadow-md mb-1 whitespace-nowrap flex items-center gap-1">
-              <span>🍓</span>
-              <span>{origin.name.split(' ')[0]}</span>
+            <div className="px-2 py-0.5 rounded bg-[#090d16] text-cyan-400 font-mono text-[9px] font-black uppercase border border-cyan-500/40 shadow-lg mb-1 whitespace-nowrap flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>ORIGIN [{origin.quantCode || 'NODE_A'}]</span>
             </div>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-pink-400 text-white flex items-center justify-center font-black text-xs shadow-xl ring-4 ring-white dark:ring-[#2e1c2a] animate-bounce">
+            <div className="w-7 h-7 rounded-lg bg-cyan-500 text-slate-950 flex items-center justify-center font-mono font-black text-xs shadow-xl shadow-cyan-500/30 border border-white">
               A
             </div>
           </div>
         </div>
       )}
 
-      {/* Destination Marker Pin (B) - Sparkle Heart */}
+      {/* Destination Marker Pin (B) - Goldman Sachs / Target Gateway */}
       {destination && (
         <div
           className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125 cursor-pointer group"
@@ -256,14 +264,14 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
             top: `${destination.coordinates.y}%`,
             left: `${destination.coordinates.x}%`
           }}
-          title={`Destination: ${destination.name}`}
+          title={`Destination Target: ${destination.name}`}
         >
           <div className="flex flex-col items-center">
-            <div className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white text-[10px] font-black uppercase shadow-md mb-1 whitespace-nowrap flex items-center gap-1">
-              <span>💖</span>
-              <span>{destination.name.split(' ')[0]}</span>
+            <div className="px-2 py-0.5 rounded bg-[#090d16] text-amber-300 font-mono text-[9px] font-black uppercase border border-amber-400/40 shadow-lg mb-1 whitespace-nowrap flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              <span>TARGET [{destination.quantCode || 'NODE_B'}]</span>
             </div>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-600 to-purple-500 text-white flex items-center justify-center font-black text-xs shadow-xl ring-4 ring-white dark:ring-[#2e1c2a] animate-bounce">
+            <div className="w-7 h-7 rounded-lg bg-amber-400 text-slate-950 flex items-center justify-center font-mono font-black text-xs shadow-xl shadow-amber-400/30 border border-white animate-bounce">
               B
             </div>
           </div>
@@ -280,13 +288,13 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
           }}
         >
           <div className="relative flex items-center justify-center">
-            <div className="w-14 h-14 bg-pink-400/40 rounded-full animate-ping absolute"></div>
-            <div className="w-10 h-10 bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-500 border-2 border-white rounded-full flex items-center justify-center text-white shadow-2xl relative z-10">
+            <div className="w-14 h-14 bg-cyan-400/20 rounded-full animate-ping absolute"></div>
+            <div className="w-10 h-10 bg-[#090d16] border-2 border-cyan-400 rounded-xl flex items-center justify-center text-cyan-300 shadow-2xl shadow-cyan-400/50 relative z-10">
               <span className="material-symbols-outlined text-[20px]">
                 {activeRoute.mode === 'car'
-                  ? 'directions_car'
+                  ? 'local_taxi'
                   : activeRoute.mode === 'transit'
-                  ? 'directions_bus'
+                  ? 'train'
                   : 'directions_walk'}
               </span>
             </div>
@@ -296,92 +304,100 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
       {/* Navigation In-Progress Floating HUD Banner (Top-Center) */}
       {isNavigating && activeRoute && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 px-5 py-2.5 rounded-2xl shadow-2xl border backdrop-blur-xl bg-[#201121]/95 text-pink-100 border-pink-500/50">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white font-bold shadow-md shadow-pink-500/30">
-            <span className="material-symbols-outlined text-[18px]">navigation</span>
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 px-5 py-2.5 rounded-xl shadow-2xl border backdrop-blur-xl bg-[#090d16]/95 text-slate-100 border-cyan-500/50 font-mono">
+          <div className="w-7 h-7 rounded-lg bg-cyan-500 text-slate-950 flex items-center justify-center font-bold shadow-md shadow-cyan-500/30">
+            <span className="material-symbols-outlined text-[16px]">navigation</span>
           </div>
           <div className="min-w-0">
-            <div className="text-[11px] font-extrabold text-pink-300 uppercase tracking-wider flex items-center gap-1">
-              <span>✨</span>
-              <span className="truncate">{activeRoute.steps[navCurrentStepIndex]?.instruction || 'Proceed along sweet route'}</span>
+            <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+              <span>ACTIVE CORRIDOR TELEMETRY</span>
+              <span className="text-slate-500">•</span>
+              <span className="text-amber-300 truncate">
+                {activeRoute.steps[navCurrentStepIndex]?.instruction || 'Proceeding along designated alpha route'}
+              </span>
             </div>
-            <div className="text-xs text-pink-200/80 font-medium">
-              Speed: 45 km/h • Remaining: {((1 - navProgress) * activeRoute.distanceKm).toFixed(1)} km 🌸
+            <div className="text-xs text-slate-300 font-mono">
+              Speed: <span className="text-emerald-400 font-bold">54.2 km/h</span> • Remaining:{' '}
+              <span className="text-cyan-300 font-bold">{((1 - navProgress) * activeRoute.distanceKm).toFixed(1)} km</span> • P99 Delta: 0.0s
             </div>
           </div>
           <button
             onClick={onStopNavigation}
-            className="px-3 py-1 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold text-xs shadow-sm ml-2"
+            className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-mono font-bold text-xs shadow-sm ml-2"
           >
-            End
+            TERMINATE
           </button>
         </div>
       )}
 
       {/* Live Tracking Status Badge (Top-Left) */}
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-3">
+      <div className="absolute top-4 left-4 z-20 flex items-center gap-3 font-mono">
         <div
           onClick={() => setLiveTracking(!liveTracking)}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full shadow-lg backdrop-blur-md cursor-pointer border transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl shadow-lg backdrop-blur-md cursor-pointer border transition-all ${
             isDark
-              ? 'bg-[#20121e]/90 border-pink-900/40 text-pink-200'
-              : 'bg-white/95 border-pink-200 text-[#371329]'
+              ? 'bg-[#090d16]/90 border-cyan-500/30 text-cyan-300'
+              : 'bg-white/95 border-slate-300 text-slate-900'
           }`}
-          title="Toggle live telemetry"
+          title="Toggle live telemetry radar"
         >
-          <span className="relative flex h-2.5 w-2.5">
+          <span className="relative flex h-2 w-2">
             {liveTracking && (
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
             )}
-            <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${liveTracking ? 'bg-pink-500' : 'bg-gray-400'}`}></span>
+            <span
+              className={`relative inline-flex rounded-full h-2 w-2 ${
+                liveTracking ? 'bg-cyan-400' : 'bg-slate-400'
+              }`}
+            ></span>
           </span>
-          <span className="text-[11px] font-extrabold tracking-wider uppercase flex items-center gap-1">
-            <span>{liveTracking ? '✨ Live GPS' : 'GPS Paused'}</span>
+          <span className="text-[10px] font-bold tracking-wider uppercase">
+            {liveTracking ? 'REAL-TIME RADAR • 100HZ' : 'TELEMETRY PAUSED'}
           </span>
         </div>
       </div>
 
       {/* Layer Controls (Top-Right) */}
-      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
+      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 font-mono">
         <div className="relative">
           <button
             onClick={() => setShowLayerMenu(!showLayerMenu)}
-            className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-colors border backdrop-blur-md ${
+            className={`w-9 h-9 rounded-xl shadow-lg flex items-center justify-center transition-colors border backdrop-blur-md ${
               isDark
-                ? 'bg-[#20121e]/90 text-pink-200 border-pink-900/40 hover:bg-[#2c1729]'
-                : 'bg-white text-[#371329] border-pink-200 hover:bg-pink-50'
+                ? 'bg-[#090d16]/90 text-cyan-300 border-cyan-500/30 hover:border-cyan-400'
+                : 'bg-white text-slate-900 border-slate-300 hover:bg-slate-50'
             }`}
-            title="Map Layers"
+            title="Sensor Layers"
           >
-            <span className="material-symbols-outlined text-[20px]">layers</span>
+            <span className="material-symbols-outlined text-[18px]">layers</span>
           </button>
 
           {showLayerMenu && (
             <div
-              className={`absolute right-0 top-12 w-44 rounded-2xl p-1.5 shadow-2xl z-30 border ${
-                isDark ? 'bg-[#20121e] border-[#381a34] text-pink-100' : 'bg-white border-pink-200 text-[#371329]'
+              className={`absolute right-0 top-11 w-48 rounded-xl p-1.5 shadow-2xl z-30 border ${
+                isDark ? 'bg-[#090d16] border-slate-700 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
               }`}
             >
-              <div className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 text-pink-500">
-                Map View Layers
+              <div className="text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 text-slate-400">
+                Tactical Visualizer Layers
               </div>
-              {(['transit', 'radar', 'satellite'] as const).map((layer) => (
+              {(['neural', 'radar', 'satellite'] as const).map((layer) => (
                 <button
                   key={layer}
                   onClick={() => {
                     setActiveLayer(layer);
                     setShowLayerMenu(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold capitalize flex items-center justify-between ${
+                  className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-mono font-semibold capitalize flex items-center justify-between ${
                     activeLayer === layer
-                      ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white font-bold'
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold'
                       : isDark
-                      ? 'hover:bg-[#2f182c]'
-                      : 'hover:bg-pink-50'
+                      ? 'hover:bg-slate-800'
+                      : 'hover:bg-slate-100'
                   }`}
                 >
-                  <span>{layer} Layer</span>
-                  {activeLayer === layer && <span className="text-xs">✨</span>}
+                  <span>{layer} matrix</span>
+                  {activeLayer === layer && <span className="text-[10px] text-cyan-400">ACTIVE</span>}
                 </button>
               ))}
             </div>
@@ -389,69 +405,69 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         </div>
       </div>
 
-      {/* Simulated Live Bus Markers with cute pink badges */}
-      {stops.slice(0, 2).map((st, sIdx) => (
+      {/* Simulated Live Autonomous Transit Nodes on Map */}
+      {stops.slice(0, 3).map((st, sIdx) => (
         <div
           key={st.id}
           onClick={() => onSelectStop(st)}
           className="absolute z-10 cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-115 group"
           style={{
-            top: `${sIdx === 0 ? 42 : 58}%`,
-            left: `${sIdx === 0 ? 58 : 34}%`
+            top: `${sIdx === 0 ? 42 : sIdx === 1 ? 58 : 34}%`,
+            left: `${sIdx === 0 ? 58 : sIdx === 1 ? 34 : 70}%`
           }}
-          title={`${st.routes[0]?.routeName || st.name} - Live on Route`}
+          title={`${st.routes[0]?.routeName || st.name} - Telemetry Active`}
         >
           <div
-            className={`px-3 py-1 rounded-full shadow-md flex items-center gap-1.5 border transition-all ${
+            className={`px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5 border transition-all font-mono ${
               isDark
-                ? 'bg-[#20121e] text-pink-100 border-pink-500/60 shadow-[0_0_12px_rgba(244,114,182,0.3)]'
-                : 'bg-white text-[#371329] border-pink-200 hover:border-pink-500'
+                ? 'bg-[#090d16] text-slate-100 border-cyan-500/60 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                : 'bg-white text-slate-900 border-slate-300 hover:border-cyan-600'
             }`}
           >
-            <span className="material-symbols-outlined text-[15px] text-pink-500">directions_bus</span>
-            <span className="text-[11px] font-black">{st.routes[0]?.routeNumber || '14'}</span>
-            <span className="text-[10px]">🌸</span>
+            <span className="material-symbols-outlined text-[14px] text-cyan-400">directions_bus</span>
+            <span className="text-[10px] font-black">{st.routes[0]?.routeNumber || '196X'}</span>
+            <span className="text-[9px] text-emerald-400 font-bold">● LIVE</span>
           </div>
         </div>
       ))}
 
-      {/* Floating Bottom-Right Map Navigation Controls */}
-      <div className="absolute bottom-6 right-6 z-20 flex flex-col gap-2.5">
+      {/* Floating Bottom-Right Map Controls */}
+      <div className="absolute bottom-6 right-6 z-20 flex flex-col gap-2 font-mono">
         <button
           onClick={handleResetLocation}
-          className={`w-11 h-11 rounded-full shadow-lg flex items-center justify-center transition-all border backdrop-blur-md ${
+          className={`w-9 h-9 rounded-xl shadow-lg flex items-center justify-center transition-all border backdrop-blur-md ${
             isDark
-              ? 'bg-[#20121e]/95 text-pink-200 border-pink-900/50 hover:text-pink-400 hover:border-pink-400'
-              : 'bg-white text-[#371329] border-pink-200 hover:text-pink-600'
+              ? 'bg-[#090d16]/95 text-cyan-300 border-slate-700 hover:border-cyan-400'
+              : 'bg-white text-slate-900 border-slate-300 hover:border-cyan-600'
           }`}
-          title="Center on My Location"
+          title="Center on GPS Node"
         >
-          <span className="material-symbols-outlined text-[20px]">my_location</span>
+          <span className="material-symbols-outlined text-[18px]">my_location</span>
         </button>
 
         <div
-          className={`flex flex-col rounded-2xl shadow-xl overflow-hidden border backdrop-blur-md ${
-            isDark ? 'bg-[#20121e]/95 border-pink-900/50' : 'bg-white border-pink-200'
+          className={`flex flex-col rounded-xl shadow-xl overflow-hidden border backdrop-blur-md ${
+            isDark ? 'bg-[#090d16]/95 border-slate-700' : 'bg-white border-slate-300'
           }`}
         >
           <button
             onClick={handleZoomIn}
-            className={`w-11 h-11 flex items-center justify-center transition-colors ${
-              isDark ? 'text-pink-200 hover:bg-[#2f182c]' : 'text-[#371329] hover:bg-pink-50'
+            className={`w-9 h-9 flex items-center justify-center transition-colors ${
+              isDark ? 'text-cyan-300 hover:bg-slate-800' : 'text-slate-900 hover:bg-slate-100'
             }`}
             title="Zoom In"
           >
-            <span className="material-symbols-outlined text-[20px]">add</span>
+            <span className="material-symbols-outlined text-[18px]">add</span>
           </button>
-          <div className={`h-[1px] w-6 mx-auto ${isDark ? 'bg-pink-900/50' : 'bg-pink-200'}`} />
+          <div className={`h-[1px] w-5 mx-auto ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`} />
           <button
             onClick={handleZoomOut}
-            className={`w-11 h-11 flex items-center justify-center transition-colors ${
-              isDark ? 'text-pink-200 hover:bg-[#2f182c]' : 'text-[#371329] hover:bg-pink-50'
+            className={`w-9 h-9 flex items-center justify-center transition-colors ${
+              isDark ? 'text-cyan-300 hover:bg-slate-800' : 'text-slate-900 hover:bg-slate-100'
             }`}
             title="Zoom Out"
           >
-            <span className="material-symbols-outlined text-[20px]">remove</span>
+            <span className="material-symbols-outlined text-[18px]">remove</span>
           </button>
         </div>
       </div>
@@ -459,32 +475,27 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
       {/* Contextual Stop Popup Card */}
       {selectedStop && (
         <div
-          className={`absolute bottom-6 left-6 z-20 p-4 rounded-3xl shadow-2xl max-w-xs backdrop-blur-xl border transition-all animate-[fadeIn_0.25s_ease-out] ${
-            isDark
-              ? 'bg-[#20121e]/95 border-[#381a34] text-pink-100'
-              : 'bg-white/95 border-pink-200 text-[#371329]'
+          className={`absolute bottom-6 left-6 z-20 p-4 rounded-2xl shadow-2xl max-w-sm backdrop-blur-xl border transition-all animate-[fadeIn_0.25s_ease-out] font-mono ${
+            isDark ? 'bg-[#090d16]/95 border-cyan-500/40 text-slate-100' : 'bg-white/95 border-slate-300 text-slate-900'
           }`}
         >
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 rounded-full bg-pink-100 dark:bg-pink-950 text-pink-500 flex items-center justify-center">
-              <span className="material-symbols-outlined text-[18px]">location_on</span>
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center">
+              <span className="material-symbols-outlined text-[18px]">hub</span>
             </div>
             <div>
-              <h3 className="font-extrabold text-sm leading-snug flex items-center gap-1">
-                <span>{selectedStop.name}</span>
-                <span className="text-xs">🌸</span>
-              </h3>
-              <p className="text-xs text-pink-400">Selected Transit Hub</p>
+              <h3 className="font-extrabold text-xs leading-snug">{selectedStop.name}</h3>
+              <p className="text-[10px] text-cyan-400">Node ID: {selectedStop.code} • {selectedStop.nodalThroughput || '12,000 pax/hr'}</p>
             </div>
           </div>
-          <p className="text-xs mb-3 text-pink-600 dark:text-pink-200/80">
-            {selectedStop.description || `${selectedStop.routes.length} active routes serving this location.`}
+          <p className="text-xs mb-3 text-slate-300 font-sans">
+            {selectedStop.description || `${selectedStop.routes.length} active routes serving this high-density location.`}
           </p>
           <button
             onClick={() => onViewSchedule(selectedStop)}
-            className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-xs py-2 rounded-xl shadow-md shadow-pink-500/25 transition-colors flex items-center justify-center gap-1"
+            className="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs py-2 rounded-xl shadow-md transition-colors flex items-center justify-center gap-1"
           >
-            <span>View Stop Timetable</span>
+            <span>INSPECT TIMETABLE TELEMETRY</span>
             <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
           </button>
         </div>

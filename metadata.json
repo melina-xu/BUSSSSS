@@ -1,6 +1,6 @@
 {
   "name": "Remix Urban Kinetic",
-  "description": "Urban Blossom: A sweet, aesthetic multi-modal transit navigation and trip planner (MRT, Bus, Car, Walk) with pastel live maps and turn-by-turn guidance.",
+  "description": "AETHER Quant Mobility: Institutional-grade AI transit intelligence, multi-modal route arbitrage engine (HSR, Autonomous Metro, Executive Fleet, Walk), real-time neural telemetry, and high-frequency dispatch terminal.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

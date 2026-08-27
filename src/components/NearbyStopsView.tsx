@@ -28,7 +28,7 @@ export const NearbyStopsView: React.FC<NearbyStopsViewProps> = ({
     .filter((stop) => {
       const matchSearch =
         stop.name.toLowerCase().includes(stopSearch.toLowerCase()) ||
-        stop.code.includes(stopSearch) ||
+        stop.code.toLowerCase().includes(stopSearch.toLowerCase()) ||
         stop.routes.some(
           (r) =>
             r.routeNumber.toLowerCase().includes(stopSearch.toLowerCase()) ||
@@ -39,126 +39,115 @@ export const NearbyStopsView: React.FC<NearbyStopsViewProps> = ({
     .sort((a, b) => (sortDistance ? a.walkTimeMins - b.walkTimeMins : 0));
 
   return (
-    <div id="girly-nearby-stops-view" className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
-      {/* Left Panel: Stops List */}
+    <div id="aether-quant-nearby-stops-view" className="flex h-[calc(100vh-64px)] w-full overflow-hidden font-sans">
+      {/* Left Panel: High Density Quant Telemetry Nodal Matrix */}
       <div
-        className={`w-full md:w-[450px] shrink-0 flex flex-col border-r z-10 shadow-lg transition-colors ${
+        className={`w-full md:w-[460px] shrink-0 flex flex-col border-r z-10 shadow-lg transition-colors font-mono ${
           isDark
-            ? 'bg-[#1e121f] border-[#381a34] text-pink-50'
-            : 'bg-[#fff5f8] border-pink-200 text-[#371329]'
+            ? 'bg-[#080a0f] border-slate-800 text-slate-100'
+            : 'bg-slate-50 border-slate-200 text-slate-900'
         }`}
       >
         {/* List Header & Search */}
         <div
-          className={`p-5 sticky top-0 z-20 flex flex-col gap-3.5 border-b shadow-sm ${
-            isDark ? 'bg-[#180e19] border-[#381a34]' : 'bg-white border-pink-200'
+          className={`p-4 sticky top-0 z-20 flex flex-col gap-3 border-b ${
+            isDark ? 'bg-[#0d121f] border-slate-800' : 'bg-white border-slate-200'
           }`}
         >
           <div className="flex items-center justify-between">
-            <h1 className="font-black text-2xl tracking-tight flex items-center gap-1.5">
-              <span>Explore Stops</span>
-              <span>🌸</span>
-            </h1>
-            <span className="text-xs font-bold text-pink-500">
-              {filteredStops.length} stops nearby ✨
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-[20px] text-cyan-400">radar</span>
+              <h1 className="font-extrabold text-sm tracking-tight text-white dark:text-white">
+                NODAL TELEMETRY MATRIX
+              </h1>
+            </div>
+            <span className="text-[10px] font-bold text-cyan-400 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30">
+              {filteredStops.length} NODES ONLINE
             </span>
           </div>
 
           {/* Search Box */}
-          <div className="relative group">
-            <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-pink-400 group-focus-within:text-pink-600 text-[20px] transition-colors">
-              explore
+          <div className="relative">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">
+              search
             </span>
             <input
               type="text"
               value={stopSearch}
               onChange={(e) => setStopSearch(e.target.value)}
-              placeholder="Search by stop name, street or ID... 💖"
-              className={`w-full text-xs sm:text-sm py-2.5 pl-11 pr-3 rounded-2xl transition-all focus:outline-none ${
+              placeholder="Filter by Node ID, Corridor, or Line..."
+              className={`w-full text-xs py-2 pl-9 pr-8 rounded-xl font-mono transition-all focus:outline-none ${
                 isDark
-                  ? 'bg-[#281525] text-pink-100 placeholder-pink-400/50 border border-pink-900/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/30'
-                  : 'bg-pink-50/60 text-[#371329] placeholder-pink-400 border border-pink-200 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-200'
+                  ? 'bg-[#06080d] text-slate-100 placeholder-slate-500 border border-slate-700 focus:border-cyan-500'
+                  : 'bg-slate-100 text-slate-900 placeholder-slate-400 border border-slate-300 focus:border-cyan-600'
               }`}
             />
             {stopSearch && (
               <button
                 onClick={() => setStopSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-pink-400 hover:text-pink-600"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-200"
               >
-                <span className="material-symbols-outlined text-[16px]">close</span>
+                <span className="material-symbols-outlined text-[15px]">close</span>
               </button>
             )}
           </div>
 
-          {/* Filters & Sort Controls */}
-          <div className="flex items-center justify-between text-xs text-pink-400 pt-1">
-            <div className="flex items-center gap-1.5 font-bold text-pink-500">
-              <span className="material-symbols-outlined text-[16px]">my_location</span>
-              <span>Central Sakura District</span>
-            </div>
-
-            <button
-              onClick={() => setSortDistance(!sortDistance)}
-              className="flex items-center gap-1 font-extrabold text-rose-500 hover:underline cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[16px]">sort</span>
-              <span>Shortest Walk 👟</span>
-            </button>
-          </div>
-
-          {/* Transport Mode Filter Pills */}
+          {/* Mode Filter Badges */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar">
             {(['all', 'bus', 'subway', 'train'] as const).map((mode) => (
               <button
                 key={mode}
                 onClick={() => setActiveFilter(mode)}
-                className={`px-3 py-1 rounded-full text-xs font-bold capitalize whitespace-nowrap transition-all border ${
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize whitespace-nowrap transition-all border ${
                   activeFilter === mode
-                    ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white border-pink-500 shadow-xs'
+                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-400'
                     : isDark
-                    ? 'bg-[#251324] text-pink-200/80 border-[#381a34] hover:bg-[#341b31]'
-                    : 'bg-white text-[#501c3d] border-pink-200 hover:bg-pink-100/60'
+                    ? 'bg-[#06080d] text-slate-400 border-slate-800 hover:border-slate-700'
+                    : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
                 }`}
               >
                 {mode === 'all'
-                  ? 'All 🌸'
+                  ? 'All Corridors'
                   : mode === 'bus'
-                  ? 'Buses 🚌'
+                  ? 'Autonomous Express'
                   : mode === 'subway'
-                  ? 'MRT / Subway 🚇'
-                  : 'Light Rail 🚊'}
+                  ? 'HSR / Subterranean'
+                  : 'Point-to-Point'}
               </button>
             ))}
           </div>
         </div>
 
         {/* Scrollable Stops List */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-3.5">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3.5 space-y-3">
           {filteredStops.map((stop) => {
             const isSelected = selectedStop?.id === stop.id;
             return (
               <div
                 key={stop.id}
                 onClick={() => onSelectStop(stop)}
-                className={`p-4 rounded-3xl border transition-all cursor-pointer ${
+                className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                   isSelected
                     ? isDark
-                      ? 'bg-[#2f182c] border-pink-400 ring-2 ring-pink-500/40 shadow-lg'
-                      : 'bg-white border-pink-400 ring-2 ring-pink-300 shadow-md'
+                      ? 'bg-cyan-950/30 border-cyan-500 ring-1 ring-cyan-500/50 shadow-lg'
+                      : 'bg-cyan-50 border-cyan-600 ring-1 ring-cyan-600 shadow-md'
                     : isDark
-                    ? 'bg-[#180e19] border-[#381a34] hover:bg-[#251424]'
-                    : 'bg-white border-pink-200 hover:bg-pink-50/50 shadow-xs'
+                    ? 'bg-[#0b0f19] border-slate-800 hover:border-slate-700'
+                    : 'bg-white border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start mb-2.5">
                   <div>
-                    <h3 className="font-extrabold text-sm text-[#371329] dark:text-pink-50 flex items-center gap-1">
-                      <span>{stop.name}</span>
-                      <span className="text-xs">🌸</span>
-                    </h3>
-                    <p className="text-xs text-pink-500 font-semibold flex items-center gap-1 mt-0.5">
-                      <span className="material-symbols-outlined text-[13px]">directions_walk</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                        {stop.code}
+                      </span>
+                      <h3 className="font-extrabold text-xs text-white dark:text-white font-sans">{stop.name}</h3>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1 flex items-center gap-2">
                       <span>{stop.distanceDisplay}</span>
+                      <span>•</span>
+                      <span className="text-emerald-400 font-bold">{stop.nodalThroughput || '14,200 pax/hr'}</span>
                     </p>
                   </div>
 
@@ -167,51 +156,55 @@ export const NearbyStopsView: React.FC<NearbyStopsViewProps> = ({
                       e.stopPropagation();
                       onViewSchedule(stop);
                     }}
-                    className="text-xs font-black text-rose-500 hover:underline flex items-center gap-1"
+                    className="text-[10px] font-bold text-cyan-400 hover:underline flex items-center gap-1"
                   >
-                    <span>Timetable</span>
+                    <span>TIMETABLE</span>
                     <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
                   </button>
                 </div>
 
                 {/* Routes Grid */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {stop.routes.map((route, rIdx) => (
                     <div
                       key={rIdx}
-                      className={`flex items-center justify-between p-2.5 rounded-2xl ${
-                        isDark ? 'bg-[#261525]' : 'bg-[#fff5f8]'
+                      className={`flex items-center justify-between p-2 rounded-lg ${
+                        isDark ? 'bg-[#06080d]' : 'bg-slate-100'
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div
-                          className={`w-9 h-6 rounded-full flex items-center justify-center font-black text-[11px] shrink-0 text-white shadow-xs ${
-                            route.colorType === 'secondary'
-                              ? 'bg-gradient-to-tr from-purple-500 to-indigo-500'
-                              : route.colorType === 'delayed'
-                              ? 'bg-amber-500'
-                              : 'bg-gradient-to-tr from-pink-500 to-rose-500'
-                          }`}
-                        >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="font-black text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                           {route.routeNumber}
-                        </div>
-                        <span className="text-xs font-semibold truncate text-[#371329] dark:text-pink-100">
-                          {route.routeName}
                         </span>
+                        <div className="min-w-0">
+                          <div className="text-xs font-semibold truncate text-slate-200 font-sans">
+                            {route.routeName}
+                          </div>
+                          {route.vehicleTelemetryId && (
+                            <div className="text-[9px] text-slate-500">
+                              {route.vehicleTelemetryId} • {route.speedKmh ? `${route.speedKmh} km/h` : 'Lock'}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div className="text-right shrink-0 pl-2">
                         <span
                           className={`text-xs font-black ${
                             route.status === 'arriving'
-                              ? 'text-pink-500 animate-pulse'
+                              ? 'text-cyan-400 animate-pulse'
                               : route.status === 'delayed'
-                              ? 'text-amber-500'
-                              : 'text-rose-500 dark:text-rose-400'
+                              ? 'text-amber-400'
+                              : 'text-emerald-400'
                           }`}
                         >
                           {route.primaryTime}
                         </span>
+                        {route.loadFactorPct && (
+                          <div className="text-[9px] text-slate-500">
+                            Cap: <span className={route.loadFactorPct > 80 ? 'text-amber-400 font-bold' : 'text-slate-400'}>{route.loadFactorPct}%</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

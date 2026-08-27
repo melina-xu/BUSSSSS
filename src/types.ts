@@ -14,6 +14,7 @@ export interface LocationItem {
   coordinates: { x: number; y: number; lat?: number; lng?: number };
   category: 'current' | 'recent' | 'landmark' | 'mrt' | 'bus' | 'airport';
   icon: string;
+  quantCode?: string;
 }
 
 export interface NavigationStep {
@@ -32,6 +33,8 @@ export interface NavigationStep {
   departureTime?: string;
   arrivalTime?: string;
   isTransfer?: boolean;
+  telemetrySpeed?: string;
+  efficiencyScore?: number;
 }
 
 export interface RouteOption {
@@ -57,6 +60,10 @@ export interface RouteOption {
     bg: string;
   }[];
   alternativesPolyline?: { x: number; y: number }[];
+  alphaTimeSavedMin?: number;
+  neuralConfidence?: number;
+  volatilityRating?: 'LOW' | 'MED' | 'HIGH';
+  arbitrageType?: 'ALPHA_SPEED' | 'ZERO_TRANSFER' | 'EXECUTIVE_CORRIDOR' | 'ECO_EFFICIENCY';
 }
 
 export interface RouteArrival {
@@ -74,6 +81,9 @@ export interface RouteArrival {
   platform?: string;
   direction?: string;
   live?: boolean;
+  loadFactorPct?: number;
+  vehicleTelemetryId?: string;
+  speedKmh?: number;
 }
 
 export interface TransitStop {
@@ -82,7 +92,7 @@ export interface TransitStop {
   code: string;
   walkTimeMins: number;
   distanceMeters?: number;
-  distanceDisplay: string; // "2 min walk", "3 min • Stop ID: 9482", "0.1 MI AWAY"
+  distanceDisplay: string; // "3 min • Node ID: 9482"
   temp: string;
   weatherIcon: string;
   coordinates: { x: number; y: number; lat?: number; lng?: number };
@@ -92,6 +102,8 @@ export interface TransitStop {
   type?: 'bus' | 'subway' | 'multimodal' | 'ferry';
   description?: string;
   totalActiveRoutes?: number;
+  nodalThroughput?: string;
+  reliabilityScore?: number;
 }
 
 export interface SavedRoute {
@@ -108,6 +120,9 @@ export interface SavedRoute {
   stopsCount: number;
   favorite: boolean;
   colorType: 'primary' | 'secondary' | 'tertiary';
+  quantYield?: string;
+  onTimeP99?: string;
+  corridorRisk?: 'ALPHA' | 'OPTIMAL' | 'MODERATE';
 }
 
 export interface NetworkAlert {
@@ -121,6 +136,8 @@ export interface NetworkAlert {
   skippedStops?: string[];
   actionLinkText?: string;
   type: 'transit' | 'weather' | 'schedule' | 'general';
+  riskScore?: string;
+  automatedRerouteYield?: string;
 }
 
 export interface AlertNotificationSetting {
@@ -130,6 +147,7 @@ export interface AlertNotificationSetting {
   triggerDescription: string;
   enabled: boolean;
   timeWindow?: string;
+  hedgeThreshold?: string;
 }
 
 export interface WeatherData {
@@ -142,6 +160,9 @@ export interface WeatherData {
   hourlyPoints: { time: string; temp: number; pop: number }[];
   rainProbability: { label: string; prob: number; highlight?: boolean }[];
   activeAdvisories: { title: string; desc: string; severity: 'warning' | 'info' }[];
+  frictionIndex?: string;
+  pressureHpa?: number;
+  visibilityKm?: number;
 }
 
 export interface StopScheduleEntry {
@@ -151,4 +172,6 @@ export interface StopScheduleEntry {
   platform: string;
   status: 'On Time' | 'Delayed' | 'Cancelled' | 'Boarding';
   delayMins?: number;
+  vehicleId?: string;
+  loadPct?: number;
 }

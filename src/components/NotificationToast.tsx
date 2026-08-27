@@ -14,9 +14,9 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
   theme,
   title,
   message,
-  routeNumber = '196',
+  routeNumber = 'HSR-01',
   onClose,
-  autoCloseMs = 6000
+  autoCloseMs = 5000
 }) => {
   const isDark = theme === 'dark';
 
@@ -29,47 +29,47 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
 
   return (
     <div
-      id="commuter-push-toast"
-      className="fixed top-20 right-6 z-50 max-w-sm w-full animate-bounce-short select-none"
+      id="aether-quant-push-toast"
+      className="fixed top-16 right-6 z-50 max-w-sm w-full font-mono select-none"
     >
       <div
-        className={`rounded-3xl p-4 shadow-2xl border flex items-start gap-3 backdrop-blur-xl transition-all ${
+        className={`rounded-2xl p-4 shadow-2xl border flex items-start gap-3 backdrop-blur-xl transition-all ${
           isDark
-            ? 'bg-[#20121e]/95 border-pink-500 text-pink-50 shadow-[0_10px_30px_rgba(244,114,182,0.25)]'
-            : 'bg-white/95 border-pink-400 text-[#371329] shadow-[0_10px_30px_rgba(244,114,182,0.2)]'
+            ? 'bg-[#090d16]/95 border-cyan-500/50 text-slate-100 shadow-[0_10px_30px_rgba(0,240,255,0.15)]'
+            : 'bg-white/95 border-slate-300 text-slate-900 shadow-xl'
         }`}
       >
-        {/* Cute Blossom Icon */}
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shrink-0 shadow-md shadow-pink-500/25">
-          <span className="material-symbols-outlined text-[22px]">favorite</span>
+        {/* Quant Icon */}
+        <div className="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center shrink-0">
+          <span className="material-symbols-outlined text-[20px]">sensors</span>
         </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-sm">{title}</span>
-              <span className="text-[10px] font-black px-2 py-0.2 rounded-full bg-pink-500 text-white">
+              <span className="font-extrabold text-xs text-white dark:text-white font-sans">{title}</span>
+              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                 {routeNumber}
               </span>
             </div>
-            <span className="text-[10px] text-pink-400 font-bold">Just now 🌸</span>
+            <span className="text-[9px] text-slate-400">P99: 0.04m</span>
           </div>
 
-          <p className="text-xs text-pink-600 dark:text-pink-200/80 mt-1 leading-snug font-medium">
+          <p className="text-xs text-slate-300 mt-1 leading-snug font-sans">
             {message}
           </p>
 
-          <div className="mt-2 flex items-center justify-between">
-            <span className="text-[10px] font-extrabold text-rose-500 flex items-center gap-1">
-              <span>✨</span>
-              <span>Arriving on schedule</span>
+          <div className="mt-2 flex items-center justify-between text-[9px]">
+            <span className="font-bold text-emerald-400 flex items-center gap-1">
+              <span>●</span>
+              <span>TELEMETRY SYNCHRONIZED</span>
             </span>
             <button
               onClick={onClose}
-              className="text-[10px] font-bold text-pink-400 hover:text-pink-600"
+              className="font-bold text-slate-400 hover:text-slate-200"
             >
-              Dismiss
+              DISMISS
             </button>
           </div>
         </div>
