@@ -1,8 +1,6 @@
 {
-  "name": "Remix Urban Kinetic",
-  "description": "Timeless, simple, and fast Singapore public bus arrival timings, saved commute stops, live carpark lots, and MRT rail service alerts powered by LTA DataMall.",
-  "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
+  "name": "Urban Kinetic - Singapore Transit",
+  "description": "High-contrast urban transit companion for Singapore commuters featuring OneMap routing, live LTA bus/train arrivals, real-time weather forecasts, and service alerts.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

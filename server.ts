@@ -1,16 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import dotenv from 'dotenv';
-import {
-  handleBusArrival,
-  handleCarParkAvailability,
-  handleTrafficIncidents,
-  handleTrainServiceAlerts,
-  handleLtaStatus
-} from './api/lta';
-
-dotenv.config();
+import { apiRouter } from './api/router';
 
 async function startServer() {
   const app = express();
@@ -18,23 +9,14 @@ async function startServer() {
 
   app.use(express.json());
 
-  // LTA DataMall API proxy routes (Guardrail: Credential read strictly inside api/)
-  app.get('/api/lta/status', handleLtaStatus);
-  app.get('/api/lta/bus-arrival', handleBusArrival);
-  app.get('/api/lta/carparks', handleCarParkAvailability);
-  app.get('/api/lta/traffic-incidents', handleTrafficIncidents);
-  app.get('/api/lta/train-alerts', handleTrainServiceAlerts);
+  // Mount backend API routes first
+  app.use('/api', apiRouter);
 
-  // Healthcheck endpoint
-  app.get('/api/health', (_req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
-  });
-
-  // Vite development middleware or production static serving
+  // Vite middleware in dev vs static serving in production
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: 'spa'
+      appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
@@ -46,7 +28,7 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[AETHER QUANT] Backend server live on http://0.0.0.0:${PORT}`);
+    console.log(`SG Transit Server running on http://0.0.0.0:${PORT}`);
   });
 }
 

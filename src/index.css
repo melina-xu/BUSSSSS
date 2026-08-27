@@ -2,32 +2,291 @@
 
 @layer base {
   :root {
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --color-surface: #f8fafc;
+    --color-surface-dim: #f1f5f9;
+    --color-surface-bright: #ffffff;
+    --color-surface-container: #ffffff;
+    --color-on-surface: #0f172a;
+    --color-on-surface-variant: #334155;
+    --color-on-surface-muted: #64748b;
+    --color-primary: #10b981;
+    --color-primary-container: #059669;
+    --color-on-primary-container: #ffffff;
+    --color-secondary: #2563eb;
+    --color-secondary-container: #1d4ed8;
+    --color-accent-amber: #fbbf24;
+    --color-accent-indigo: #4f46e5;
+    --color-accent-rose: #f43f5e;
+    --color-border-dark: #0f172a;
   }
 
   body {
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overscroll-behavior: none;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
   }
 }
 
-/* Custom minimal scrollbar */
+/* Custom scrollbar for clean bento aesthetic */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f5f9;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.2);
-  border-radius: 9999px;
+  background: #cbd5e1;
+  border-radius: 4px;
+  border: 1px solid #0f172a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.4);
+/* Bento Neo-brutalist Hard Shadows */
+.bento-shadow-sm {
+  box-shadow: 2px 2px 0px 0px rgba(15, 23, 42, 1);
 }
+.bento-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(15, 23, 42, 1);
+}
+.bento-shadow-md {
+  box-shadow: 6px 6px 0px 0px rgba(15, 23, 42, 1);
+}
+.bento-shadow-lg {
+  box-shadow: 8px 8px 0px 0px rgba(15, 23, 42, 1);
+}
+.bento-shadow-amber {
+  box-shadow: 4px 4px 0px 0px #d97706;
+}
+.bento-shadow-blue {
+  box-shadow: 4px 4px 0px 0px #1d4ed8;
+}
+
+/* Dot grid background */
+.bg-bento-dots {
+  background-image: radial-gradient(#0f172a 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+}
+
+/* Leaflet Container Bento Styling */
+.leaflet-container {
+  background-color: #f1f5f9 !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 2px solid #0f172a !important;
+  box-shadow: 3px 3px 0px 0px rgba(15, 23, 42, 1) !important;
+  font-weight: 900 !important;
+  border-radius: 8px !important;
+  margin-bottom: 4px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: #fbbf24 !important;
+  color: #0f172a !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 3px solid #0f172a !important;
+  border-radius: 16px !important;
+  box-shadow: 6px 6px 0px 0px rgba(15, 23, 42, 1) !important;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #64748b !important;
+  font-size: 10px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+}
+
+.leaflet-control-attribution a {
+  color: #2563eb !important;
+  font-weight: 700 !important;
+}
+
+@keyframes pulse-live {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+.animate-pulse-live {
+  animation: pulse-live 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==========================================================================
+   LIVE WEATHER ANIMATIONS ON MAP (RAIN, SUN, CLOUDS, STORM, RADAR)
+   ========================================================================== */
+
+/* Rain Drop Animation */
+@keyframes rain-fall {
+  0% {
+    transform: translateY(-20px) translateX(-5px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(35px) translateX(10px);
+    opacity: 0;
+  }
+}
+
+/* Rain Ripple on Ground */
+@keyframes rain-ripple {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Sun Ray Rotation */
+@keyframes sun-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sun Glow Pulse */
+@keyframes sun-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+/* Cloud Floating Drift */
+@keyframes cloud-drift-x {
+  0% {
+    transform: translateX(-12px);
+  }
+  50% {
+    transform: translateX(12px);
+  }
+  100% {
+    transform: translateX(-12px);
+  }
+}
+
+/* Thunderstorm Lightning Flash */
+@keyframes lightning-flash {
+  0%, 90%, 100% {
+    opacity: 0;
+  }
+  92% {
+    opacity: 0.9;
+    filter: brightness(2);
+  }
+  94% {
+    opacity: 0.2;
+  }
+  96% {
+    opacity: 1;
+    filter: brightness(2.5);
+  }
+  98% {
+    opacity: 0;
+  }
+}
+
+/* Radar Sweep Pulse */
+@keyframes radar-pulse-wave {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Mist Drift */
+@keyframes mist-drift {
+  0% {
+    transform: translateX(-8px) scaleY(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(8px) scaleY(1.05);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(-8px) scaleY(0.95);
+    opacity: 0.5;
+  }
+}
+
+/* Class utilities for weather icons and overlays */
+.weather-rain-streak {
+  position: absolute;
+  width: 2px;
+  height: 12px;
+  background: linear-gradient(to bottom, rgba(147, 197, 253, 0), rgba(59, 130, 246, 0.95));
+  border-radius: 9999px;
+  animation: rain-fall 0.9s linear infinite;
+}
+
+.weather-rain-ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(96, 165, 250, 0.75);
+  animation: rain-ripple 1.6s ease-out infinite;
+}
+
+.weather-sun-rays {
+  animation: sun-spin 16s linear infinite;
+}
+
+.weather-sun-glow {
+  animation: sun-pulse 3s ease-in-out infinite;
+}
+
+.weather-cloud-drift {
+  animation: cloud-drift-x 6s ease-in-out infinite;
+}
+
+.weather-lightning-flash {
+  animation: lightning-flash 5s infinite;
+}
+
+.weather-radar-wave {
+  animation: radar-pulse-wave 3s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.weather-mist-wave {
+  animation: mist-drift 5s ease-in-out infinite;
+}
+

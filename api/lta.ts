@@ -1,33 +1,32 @@
 import { Request, Response } from 'express';
 
-// Read credential ONLY in api/ directory via process.env
-const getAccountKey = (): string | undefined => {
-  return process.env.LTA_ACCOUNT_KEY || process.env.ACCOUNT_KEY || process.env.LTA_DATAMALL_API_KEY;
-};
-
-const LTA_BASE_URL = 'https://datamall2.mytransport.sg/ltaodataservice';
-
 /**
- * Next buses at a stop (v3)
- * GET /api/lta/bus-arrival?busStopCode=83139&serviceNo=15
+ * LTA DataMall v3 API Handler
+ * 
+ * Endpoints:
+ * - Bus Arrivals (v3): https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=...&ServiceNo=...
+ * - Traffic Incidents: https://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents
+ * - Train Service Alerts: https://datamall2.mytransport.sg/ltaodataservice/TrainServiceAlerts
  */
+
 export async function handleBusArrival(req: Request, res: Response): Promise<void> {
-  const accountKey = getAccountKey();
+  const accountKey = process.env.LTA_ACCOUNT_KEY;
+
   if (!accountKey) {
     res.status(500).json({ error: 'credential not configured' });
     return;
   }
 
-  const busStopCode = (req.query.busStopCode || req.query.BusStopCode) as string;
-  const serviceNo = (req.query.serviceNo || req.query.ServiceNo) as string | undefined;
+  const busStopCode = req.query.BusStopCode as string;
+  const serviceNo = req.query.ServiceNo as string | undefined;
 
   if (!busStopCode) {
-    res.status(400).json({ error: 'Missing required busStopCode query parameter' });
+    res.status(400).json({ error: 'BusStopCode query parameter is required' });
     return;
   }
 
   try {
-    let url = `${LTA_BASE_URL}/v3/BusArrival?BusStopCode=${encodeURIComponent(busStopCode)}`;
+    let url = `https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${encodeURIComponent(busStopCode)}`;
     if (serviceNo) {
       url += `&ServiceNo=${encodeURIComponent(serviceNo)}`;
     }
@@ -36,166 +35,96 @@ export async function handleBusArrival(req: Request, res: Response): Promise<voi
       method: 'GET',
       headers: {
         AccountKey: accountKey,
-        accept: 'application/json'
-      }
+        accept: 'application/json',
+      },
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
       res.status(response.status).json({
-        error: `LTA API responded with status ${response.status}`,
-        details: errorText
+        error: `LTA DataMall responded with status ${response.status}`,
+        statusText: response.statusText,
       });
       return;
     }
 
     const data = await response.json();
-    res.setHeader('Cache-Control', 'public, max-age=15');
     res.json(data);
-  } catch (error: any) {
+  } catch (error) {
     res.status(502).json({
-      error: 'Failed to fetch bus arrival telemetry from LTA DataMall',
-      message: error?.message || 'Network error'
+      error: 'Failed to fetch from LTA DataMall API',
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 }
 
-/**
- * Live carpark lots (HDB + LTA + URA)
- * GET /api/lta/carparks
- */
-export async function handleCarParkAvailability(req: Request, res: Response): Promise<void> {
-  const accountKey = getAccountKey();
+export async function handleTrafficIncidents(_req: Request, res: Response): Promise<void> {
+  const accountKey = process.env.LTA_ACCOUNT_KEY;
+
   if (!accountKey) {
     res.status(500).json({ error: 'credential not configured' });
     return;
   }
 
   try {
-    const url = `${LTA_BASE_URL}/CarParkAvailabilityv2`;
+    const url = 'https://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents';
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         AccountKey: accountKey,
-        accept: 'application/json'
-      }
+        accept: 'application/json',
+      },
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
       res.status(response.status).json({
-        error: `LTA API responded with status ${response.status}`,
-        details: errorText
+        error: `LTA DataMall responded with status ${response.status}`,
+        statusText: response.statusText,
       });
       return;
     }
 
     const data = await response.json();
-    res.setHeader('Cache-Control', 'public, max-age=60');
     res.json(data);
-  } catch (error: any) {
+  } catch (error) {
     res.status(502).json({
-      error: 'Failed to fetch carpark availability from LTA DataMall',
-      message: error?.message || 'Network error'
+      error: 'Failed to fetch Traffic Incidents from LTA DataMall',
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 }
 
-/**
- * Traffic incidents
- * GET /api/lta/traffic-incidents
- */
-export async function handleTrafficIncidents(req: Request, res: Response): Promise<void> {
-  const accountKey = getAccountKey();
+export async function handleTrainAlerts(_req: Request, res: Response): Promise<void> {
+  const accountKey = process.env.LTA_ACCOUNT_KEY;
+
   if (!accountKey) {
     res.status(500).json({ error: 'credential not configured' });
     return;
   }
 
   try {
-    const url = `${LTA_BASE_URL}/TrafficIncidents`;
+    const url = 'https://datamall2.mytransport.sg/ltaodataservice/TrainServiceAlerts';
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         AccountKey: accountKey,
-        accept: 'application/json'
-      }
+        accept: 'application/json',
+      },
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
       res.status(response.status).json({
-        error: `LTA API responded with status ${response.status}`,
-        details: errorText
+        error: `LTA DataMall responded with status ${response.status}`,
+        statusText: response.statusText,
       });
       return;
     }
 
     const data = await response.json();
-    res.setHeader('Cache-Control', 'public, max-age=30');
     res.json(data);
-  } catch (error: any) {
+  } catch (error) {
     res.status(502).json({
-      error: 'Failed to fetch traffic incidents from LTA DataMall',
-      message: error?.message || 'Network error'
+      error: 'Failed to fetch Train Service Alerts from LTA DataMall',
+      message: error instanceof Error ? error.message : String(error),
     });
   }
-}
-
-/**
- * MRT/LRT status / Train Service Alerts
- * GET /api/lta/train-alerts
- */
-export async function handleTrainServiceAlerts(req: Request, res: Response): Promise<void> {
-  const accountKey = getAccountKey();
-  if (!accountKey) {
-    res.status(500).json({ error: 'credential not configured' });
-    return;
-  }
-
-  try {
-    const url = `${LTA_BASE_URL}/TrainServiceAlerts`;
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        AccountKey: accountKey,
-        accept: 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      res.status(response.status).json({
-        error: `LTA API responded with status ${response.status}`,
-        details: errorText
-      });
-      return;
-    }
-
-    const data = await response.json();
-    res.setHeader('Cache-Control', 'public, max-age=30');
-    res.json(data);
-  } catch (error: any) {
-    res.status(502).json({
-      error: 'Failed to fetch train service alerts from LTA DataMall',
-      message: error?.message || 'Network error'
-    });
-  }
-}
-
-/**
- * Status check endpoint to see if credentials are configured
- * GET /api/lta/status
- */
-export async function handleLtaStatus(_req: Request, res: Response): Promise<void> {
-  const accountKey = getAccountKey();
-  res.json({
-    configured: Boolean(accountKey),
-    endpoints: [
-      '/api/lta/bus-arrival?busStopCode=83139',
-      '/api/lta/carparks',
-      '/api/lta/traffic-incidents',
-      '/api/lta/train-alerts'
-    ]
-  });
 }
